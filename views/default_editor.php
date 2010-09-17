@@ -2,10 +2,10 @@
 
 	{fields}
 	
-		<p><label for="{slug}"></label> {input}</p>
+		<p><label for="{slug}">{label}</label> {input}</p>
 	
 	{/fields}
 	
-	<p><intput type="submit" value="Submit" id="submit_button" /></p>
+	<p><input type="submit" value="Submit" id="submit_button" /></p>
 
-</form>
+</form> 
