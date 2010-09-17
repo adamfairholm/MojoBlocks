@@ -28,6 +28,8 @@ class mb
 		
 		$this->addon->load->library('Blocks');
 		
+		$this->addon->load->model('blocks_mdl');
+		
 		//Make sure that we load all the assets. But just once.
 		
 		if( $this->dependencies_loaded == FALSE ):
@@ -43,6 +45,13 @@ class mb
 			$this->dependencies_loaded = TRUE;
 		
 		endif;
+		
+		//We need a database table. Since everything is supposed to be super simple, why not just check for it
+		//and install it if we don't see it there. Everyone is happy and sugar cubes for dinner.
+		
+		$this->addon->blocks_mdl->check_database();
+		 
+		 
 	}
 
 	// --------------------------------------------------------------------
@@ -136,4 +145,4 @@ class mb
 }
 
 /* End of file mb.php */
-/* Location: /third_party/robots/libraries/mb.php */
+/* Location: /third_party/block/libraries/mb.php */
