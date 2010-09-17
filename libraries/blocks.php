@@ -68,6 +68,7 @@ class blocks
 		foreach( $fields as $slug => $data ):
 
 			$form_data['fields'][$count]['slug'] 	= $slug;
+			$form_data['fields'][$count]['label'] 	= $data['label'];
 			$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data );
 					
 			$count++;		
@@ -78,7 +79,13 @@ class blocks
 		
 		$this->CI->load->library('parser');
 		
-		return $this->CI->parser->parse('default_editor', $data, TRUE);
+		$orig_view_path = $this->CI->load->_ci_view_path;
+
+		$this->CI->load->_ci_view_path = APPPATH.'third_party/mb/views/';
+		
+		echo $this->CI->parser->parse('default_editor', $form_data, TRUE);
+
+		$this->CI->load->_ci_view_path = $orig_view_path;		
 	}
 
 	// --------------------------------------------------------------------------
@@ -114,6 +121,31 @@ class blocks
 		
 		return $field;
 	}
+
+	/**
+	 * Loads a view.
+	 *
+	 * This one is from Dan Horrigan's Equipment MojoMotor addon.
+	 *
+	 * @access	private
+	 * @param	string	The view to load MUST include the folder (i.e. views/index)
+	 * @param	array	The data for the view
+	 * @param	bool	Where to return the results
+	 * @return	string	The view contents
+	 */
+	private function load_view($view, $data = array(), $return = TRUE)
+	{
+		$orig_view_path = $this->CI->load->_ci_view_path;
+		
+		$this->CI->load->_ci_view_path = APPPATH.'third_party/mb/views/';
+
+		$return = $this->CI->load->view($view, $data, $return);
+
+		$this->CI->load->_ci_view_path = $orig_view_path;
+
+		return $return;
+	}
+
 }
 
 /* End of file blocks.php */
