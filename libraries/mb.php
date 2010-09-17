@@ -98,7 +98,7 @@ class mb
 	{
 		$block = $this->addon->uri->segment(4);
 	
-		//Load up the block
+		// Load up the block
 		
 		$block = $this->addon->blocks->load_block($block);
 		
@@ -106,28 +106,23 @@ class mb
 		// Validation
 		// -------------------------------------
 		
-		$this->CI->load->library('form_validation');
+		$this->addon->load->library('form_validation');
 		
-		$this->CI->load->helper('form');
+		$this->addon->load->helper('form');
 		
-		//We need validation
-		
-		if( empty($validation) )
-			return null;
-			
 		// Go through, set validation, and make the form fields.
 		
 		foreach( $block->block_fields as $slug => $data ):
 				
-			$this->CI->form_validation->set_rules($slug, $data['label'], $data['validation']);
+			$this->addon->form_validation->set_rules($slug, $data['label'], $data['validation']);
 					
 		endforeach;
 
 		// -------------------------------------
 		
-		//Return the render function
+		// Return the render function
 		
-		if ( $this->form_validation->run() == FALSE ):
+		if ( $this->addon->form_validation->run() == FALSE ):
 		
 			if( method_exists($block, 'editor') ):
 			
@@ -141,7 +136,7 @@ class mb
 		
 		else:
 		
-			//WTF do we do here?
+			// JS knows what to do with this one.
 			
 			echo 'BLOCKS_FORM_INPUT_SUCCESS';
 		
