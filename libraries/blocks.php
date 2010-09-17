@@ -1,7 +1,9 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * MojoBlocks Addon Controller
+ * MojoBlocks Addon Library
+ *
+ * Handles various MojoBlocks functions.
  *
  * @package		MojoBlocks
  * @subpackage	Addons
@@ -15,6 +17,15 @@ class blocks
 		$this->CI =& get_instance();
 	}
 
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Load up a block
+	 *
+	 * @access	public
+	 * @param	string
+	 * @return 	obj
+	 */
 	function load_block( $block )
 	{
 		$block = strtolower($block);
@@ -38,8 +49,15 @@ class blocks
 		return $obj;
 	}
 
+	// --------------------------------------------------------------------------
+	
 	/**
 	 * Render the editor
+	 *
+	 * @access	public
+	 * @param	array
+	 * @param	string
+	 * @return	string
 	 */
 	function render_editor( $validation, $name )
 	{
@@ -73,7 +91,17 @@ class blocks
 		
 		return $html;
 	}
-	
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Creates a field based on the type. Right now it's input, textbox, and dropdown
+	 *
+	 * @access	private
+	 * @param	string
+	 * @param	array
+	 * @return	string
+	 */	
 	function _create_field( $slug, $data )
 	{
 		$field = null;
@@ -103,4 +131,4 @@ class blocks
 }
 
 /* End of file blocks.php */
-/* Location: ./third_party/mb/libraries/blocks.php */
+/* Location: ./system/mojomotor/third_party/mb/libraries/blocks.php */
