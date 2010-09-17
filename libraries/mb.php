@@ -26,6 +26,24 @@ class mb
 	{
 		$this->addon =& get_instance();
 		
+		// -------------------------------------
+		// Dip out for CSS/JS
+		// -------------------------------------
+
+		$method = $this->addon->uri->segment( 3 ); 
+
+		if( $method == 'css' || $method == 'js' ):
+			
+			$call_method = '_'.$method;
+		
+			$this->$call_method();
+			
+			die();
+		
+		endif;
+
+		// -------------------------------------
+		
 		$this->addon->load->library('Blocks');
 		
 		$this->addon->load->model('blocks_mdl');
@@ -151,7 +169,7 @@ class mb
 	/**
 	 * Output a JS file. Just like that.
 	 */
-	function js()
+	function _js()
 	{
 		$file = $this->addon->uri->segment(4);
 		
@@ -165,7 +183,7 @@ class mb
 	/**
 	 * Output a CSS file. Also just like that.
 	 */
-	function css()
+	function _css()
 	{
 		$file = $this->addon->uri->segment(4);
 		
@@ -173,6 +191,7 @@ class mb
 	
 		echo file_get_contents( APPPATH . 'third_party/mb/views/themes/css/'.$file);
 	}
+
 }
 
 /* End of file mb.php */
