@@ -43,6 +43,8 @@ class Blocks_mdl extends CI_Model {
 	 */
 	function check_database()
 	{
+		$this->load->database();
+	
 		if( ! $this->db->table_exists( $this->table_name ) ):
 		
 			$this->load->dbforge();
