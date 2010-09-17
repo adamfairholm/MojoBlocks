@@ -50,8 +50,6 @@ class mb
 		//and install it if we don't see it there. Everyone is happy and sugar cubes for dinner.
 		
 		$this->addon->blocks_mdl->check_database();
-		 
-		 
 	}
 
 	// --------------------------------------------------------------------
@@ -86,15 +84,48 @@ class mb
 		
 		$block = $this->addon->blocks->load_block($block);
 		
+		// -------------------------------------
+		// Validation
+		// -------------------------------------
+		
+		$this->CI->load->library('form_validation');
+		
+		$this->CI->load->helper('form');
+		
+		//We need validation
+		
+		if( empty($validation) )
+			return null;
+			
+		// Go through, set validation, and make the form fields.
+		
+		foreach( $block->block_fields as $slug => $data ):
+				
+			$this->CI->form_validation->set_rules($slug, $data['label'], $data['validation']);
+					
+		endforeach;
+
+		// -------------------------------------
+		
 		//Return the render function
 		
-		if( method_exists($block, 'editor') ):
+		if ( $this->form_validation->run() == FALSE ):
 		
-			echo $block->editor();
+			if( method_exists($block, 'editor') ):
 			
+				echo $block->editor();
+				
+			else:
+			
+				echo $this->addon->blocks->render_editor( $block->block_fields, $block->block_name );
+			
+			endif;
+		
 		else:
 		
-			echo $this->addon->blocks->render_editor( $block->block_fields, $block->block_name );
+			//WTF do we do here?
+			
+			echo 'BLOCKS_FORM_INPUT_SUCCESS';
 		
 		endif;
 	}

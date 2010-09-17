@@ -59,37 +59,26 @@ class blocks
 	 * @param	string
 	 * @return	string
 	 */
-	function render_editor( $validation, $name )
+	function render_editor( $fields, $name )
 	{
-		$html = null;
+		$form_data = array();
 		
-		//Run Validation
-	
-		$this->CI->load->library('form_validation');
+		$count = 0;
 		
-		$this->CI->load->helper('form');
-		
-		if( empty($validation) )
-			return null;
-			
-		//Get the form started
-		$html .= form_open();
-		
-		foreach( $validation as $slug => $data ):
-		
-			//Setup validation
-		
-			$this->CI->form_validation->set_rules($slug, $data['label'], $data['validation']);
-			
-			//Create field
-			
-			$html .= $this->_create_field( $slug, $data );
-		
+		foreach( $fields as $slug => $data ):
+
+			$form_data['fields'][$count]['slug'] 	= $slug;
+			$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data );
+					
+			$count++;		
+					
 		endforeach;
 		
-		$html .= form_close();
+		// We'll use the parser for this.
 		
-		return $html;
+		$this->CI->load->library('parser');
+		
+		return $this->CI->parser->parse('default_editor', $data, TRUE);
 	}
 
 	// --------------------------------------------------------------------------
@@ -113,10 +102,7 @@ class blocks
 			$data['type'] = "input";
 		
 		endif;
-		
-		//Do the label
-		$field .= '<p><label for="'.$slug.'">'.$data['label'].'</label>';
-		
+				
 		$input_config['name'] 	= $slug;
 		$input_config['id']		= $slug;
 		
@@ -126,7 +112,7 @@ class blocks
 				$field .= form_input( $input_config );
 		}
 		
-		return $field .= '</p>';
+		return $field;
 	}
 }
 
