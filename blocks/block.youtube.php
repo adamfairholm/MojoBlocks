@@ -12,6 +12,8 @@ class block_youtube
 {
 	var $block_name				= "YouTube Embed";
 	
+	var $block_slug				= "youtube";
+	
 	var $block_desc				= "Insert YouTube videos by ID or URL";
 
 	var $block_fields			= array(
