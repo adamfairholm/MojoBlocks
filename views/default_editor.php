@@ -1,4 +1,4 @@
-<form method="post" action="{form_action}">
+<form method="post" id="mb_editor" onsubmit="return false;">
 
 	{fields}
 	
@@ -6,6 +6,8 @@
 	
 	{/fields}
 	
-	<p><input type="submit" value="Submit" id="submit_button" /></p>
+	<input type="hidden" name="layout_id" id="layout_id" value="{layout_id}" />
+	
+	<p><button id="submit_button" onclick="mb_form_submit();">Submit</button></p>
 
-</form> 
+</form>
