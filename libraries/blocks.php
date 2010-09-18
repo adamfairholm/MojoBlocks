@@ -75,6 +75,10 @@ class blocks
 					
 		endforeach;
 		
+		// We need the layout id
+		
+		$form_data['layout_id'] = $this->CI->input->post('layout_id');
+		
 		// We'll use the parser for this.
 		
 		$this->CI->load->library('parser');

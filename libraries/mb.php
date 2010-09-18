@@ -67,7 +67,7 @@ class mb
 		//We need a database table. Since everything is supposed to be super simple, why not just check for it
 		//and install it if we don't see it there. Everyone is happy and sugar cubes for dinner.
 		
-		$this->addon->blocks_mdl->check_database();
+		$this->addon->blocks_mdl->check_database();		
 	}
 
 	// --------------------------------------------------------------------
@@ -141,6 +141,46 @@ class mb
 			echo 'BLOCKS_FORM_INPUT_SUCCESS';
 		
 		endif;
+	}
+
+	// --------------------------------------------------------------------
+
+	function form_process()
+	{
+		$form_data = $_POST;
+		
+		// Glean the layout_id
+		
+		$layout_id = $this->addon->input->post('layout_id');
+		
+		unset($form_data['layout_id']);
+	
+		// Load the block as see if there is a process function
+	
+		$block_name = $this->addon->uri->segment(4);
+
+		$block = $this->addon->blocks->load_block( $block_name );
+
+		if( !$block )
+			return null;	
+		
+		if( method_exists($block, 'process_form') ):
+		
+			$processed = $block->process_form( $_POST );
+			
+			if( is_array($processed) ):
+			
+				$form_data = $processed;
+			
+			endif;
+		
+		endif;
+		
+		// Save the data
+		
+		$this->addon->blocks_mdl->save_block_data($form_data, $layout_id, $block_name);
+		
+		echo "Success";
 	}
 
 	// --------------------------------------------------------------------
