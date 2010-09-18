@@ -45,10 +45,19 @@ class block_youtube
 	
 	/**
 	 * Render the YouTube embed
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return 	string
 	 */
-	function render()
+	function render( $block_data )
 	{
-		return "This is a YouTube video";
+		if( empty($block_data) )
+			return "YouTube Embed";
+	
+		$youtube_embed = '<object width="'.$block_data['width'].'" height="'.$block_data['width'].'"><param name="movie" value="http://www.youtube.com/v/'.$block_data['youtube_data'].'?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/'.$block_data['youtube_data'].'?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="'.$block_data['width'].'" height="'.$block_data['height'].'"></embed></object>';
+		
+		return $youtube_embed;
 	}
 
 	// --------------------------------------------------------------------
