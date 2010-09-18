@@ -28,17 +28,18 @@ mojoBlock.enable_block_regions();
 mojoBlock.init_editor = function (region) {
 
 	region_id = jQuery(region).attr('id');
+	block_type = jQuery(region).attr('name');
 
 	mojoBlock.region = region_id;
 	layout_id = Mojo.Vars.layout_id;
 	
 	// Replace MB Region with editor
-	
+		
 	jQuery.ajax({
 		dataType: "text",
 		type: "POST",
-		data: Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&layout_id='+layout_id,
-		url:  Mojo.URL.site_path+"/addons/mb/editor/"+region_id,
+		data: Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&layout_id='+layout_id+'&region_id='+region_id+'&page_url_title='+Mojo.Vars.page_url_title+'&block_type='+block_type,
+		url:  Mojo.URL.site_path+"/addons/mb/editor",
 		success: function(data){ $('#'+region_id).html(data); }
 	});
 
@@ -64,7 +65,7 @@ function mb_form_submit()
 		dataType: "text",
 		type: "POST",
 		data: data_string,
-		url:  Mojo.URL.site_path+"/addons/mb/form_process/"+mojoBlock.region,
+		url:  Mojo.URL.site_path+"/addons/mb/form_process",
 		success: function(data){ $('#'+region_id).html(data); }
 	});
 }

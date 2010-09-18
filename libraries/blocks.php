@@ -57,9 +57,10 @@ class blocks
 	 * @access	public
 	 * @param	array
 	 * @param	string
+	 * @param	array
 	 * @return	string
 	 */
-	function render_editor( $fields, $name )
+	function render_editor( $fields, $name, $region_data )
 	{
 		$form_data = array();
 		
@@ -75,9 +76,12 @@ class blocks
 					
 		endforeach;
 		
-		// We need the layout id
+		// We need some data
 		
-		$form_data['layout_id'] = $this->CI->input->post('layout_id');
+		$form_data['layout_id'] 		= $region_data['layout_id'];
+		$form_data['page_url_title']	= $region_data['page_url_title'];
+		$form_data['region_id']			= $region_data['region_id'];
+		$form_data['block_type']		= $region_data['block_type'];
 		
 		// We'll use the parser for this.
 		

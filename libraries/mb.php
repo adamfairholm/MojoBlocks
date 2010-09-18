@@ -11,8 +11,12 @@
 class mb
 {
 	var $addon;
+	
 	var $addon_version 						= '0.1 Beta';
+	
 	var $dependencies_loaded 				= FALSE;
+	
+	var $page_data							= array();
 
 	// --------------------------------------------------------------------
 
@@ -67,7 +71,17 @@ class mb
 		//We need a database table. Since everything is supposed to be super simple, why not just check for it
 		//and install it if we don't see it there. Everyone is happy and sugar cubes for dinner.
 		
-		$this->addon->blocks_mdl->check_database();		
+		$this->addon->blocks_mdl->check_database();	
+		
+		// If we are loading a MojoMotor page, let's get the data
+		
+		if( class_exists('Page_model') ):
+		
+			$this->page_info = $this->addon->page_model->get_page_by_url_title($this->addon->mojomotor_parser->url_title);
+			
+			$this->page_data = $this->addon->blocks_mdl->retrieve_page_data( $this->page_info->url_title, $this->page_info->layout_id );
+		
+		endif;
 	}
 
 	// --------------------------------------------------------------------
@@ -77,13 +91,25 @@ class mb
 	 */
 	function block( $tag_data = array() )
 	{
-		//Load up the block
+		// Load up the block
 		
 		$block = $this->addon->blocks->load_block($tag_data['parameters']['type']);
 		
-		//Return the render function
+		// Get the data if there is any
 		
-		return $block->render();
+		if( isset($this->page_data[$tag_data['parameters']['id']]) ):
+		
+			$block_data = $this->page_data[$tag_data['parameters']['id']]['block_content'];
+			
+		else:
+		
+			$block_data = array();
+		
+		endif;
+		
+		// Return the render function
+		
+		return $block->render( $block_data );
 	}
 	
 	// --------------------------------------------------------------------
@@ -96,8 +122,8 @@ class mb
 	 */
 	function editor()
 	{
-		$block = $this->addon->uri->segment(4);
-	
+		$block = $this->addon->input->post('block_type');
+		
 		// Load up the block
 		
 		$block = $this->addon->blocks->load_block($block);
@@ -120,17 +146,21 @@ class mb
 
 		// -------------------------------------
 		
+		$region_data = $_POST;
+
+		// -------------------------------------
+		
 		// Return the render function
 		
 		if ( $this->addon->form_validation->run() == FALSE ):
 		
 			if( method_exists($block, 'editor') ):
 			
-				echo $block->editor();
+				echo $block->editor( $region_data );
 				
 			else:
 			
-				echo $this->addon->blocks->render_editor( $block->block_fields, $block->block_name );
+				echo $this->addon->blocks->render_editor( $block->block_fields, $block->block_name, $region_data );
 			
 			endif;
 		
@@ -157,12 +187,10 @@ class mb
 	
 		// Load the block as see if there is a process function
 	
-		$block_name = $this->addon->uri->segment(4);
-
-		$block = $this->addon->blocks->load_block( $block_name );
+		$block = $this->addon->blocks->load_block( $form_data['block_type'] );
 
 		if( !$block )
-			return null;	
+			return null;
 		
 		if( method_exists($block, 'process_form') ):
 		
@@ -178,7 +206,7 @@ class mb
 		
 		// Save the data
 		
-		$this->addon->blocks_mdl->save_block_data($form_data, $layout_id, $block_name);
+		$this->addon->blocks_mdl->save_block_data($form_data, $layout_id, $form_data['block_type']);
 		
 		echo "Success";
 	}

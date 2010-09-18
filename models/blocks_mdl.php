@@ -24,6 +24,7 @@ class Blocks_mdl extends CI_Model {
 		'updated'					=> array('type' => 'DATETIME'),
 		'block_type'				=> array('type' => 'VARCHAR', 'constraint' => '50'),
 		'block_content'				=> array('type' => 'BLOB'),
+		'page_url_title'			=> array('type' => 'VARCHAR', 'constraint' => '100'),
 		'layout_id'					=> array('type' => 'INT', 'constraint' => '5')
 	);
 
@@ -32,6 +33,8 @@ class Blocks_mdl extends CI_Model {
     function Blocks_mdl()
     {
         parent::CI_Model();
+
+		$this->load->database();
     }
     
     // --------------------------------------------------------------------------
@@ -43,8 +46,6 @@ class Blocks_mdl extends CI_Model {
 	 */
 	function check_database()
 	{
-		$this->load->database();
-	
 		if( ! $this->db->table_exists( $this->table_name ) ):
 		
 			$this->load->dbforge();
@@ -59,6 +60,8 @@ class Blocks_mdl extends CI_Model {
 		
 		endif;
 	}
+
+	// --------------------------------------------------------------------------
 	
 	/**
 	 * Add data for the layout
@@ -87,7 +90,9 @@ class Blocks_mdl extends CI_Model {
 			
 			$block_data['created'] 				= date('Y-m-d H:i:s');
 			$block_data['layout_id']			= $layout_id;
-			$block_data['block_type']			= $block_name;
+			$block_data['block_type']			= $form_data['block_type'];
+			$block_data['page_url_title']		= $form_data['page_url_title'];
+			$block_data['block_id']				= $form_data['region_id'];
 			
 			$result = $this->db->insert($this->table_name, $block_data);
 		
@@ -102,6 +107,33 @@ class Blocks_mdl extends CI_Model {
 		endif;
 		
 		return $result;
+	}
+
+	// --------------------------------------------------------------------------
+
+	function retrieve_page_data( $page_url_title, $layout_id )
+	{
+		$this->db->where('page_url_title', $page_url_title);
+		$this->db->where('layout_id', $layout_id);
+		
+		$obj = $this->db->get( $this->table_name );
+		
+		$data = $obj->result_array();
+		
+		//Go through and make a pretty array
+		
+		$return = array();
+		
+		foreach( $data as $row ):
+		
+			$return[$row['block_id']]['block_type'] 		= $row['block_type'];
+			$return[$row['block_id']]['block_content'] 		= unserialize($row['block_content']);
+			$return[$row['block_id']]['page_url_title'] 	= $row['page_url_title'];
+			$return[$row['block_id']]['layout_id'] 			= $row['layout_id'];
+		
+		endforeach;
+		
+		return $return;
 	}
 
 }
