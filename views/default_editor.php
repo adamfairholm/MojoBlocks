@@ -1,5 +1,7 @@
 <form method="post" id="mb_editor" onsubmit="return false;">
 
+	{errors}
+
 	{fields}
 	
 		<p><label for="{slug}">{label}</label> {input}</p>

@@ -17,7 +17,7 @@ class mb
 	var $dependencies_loaded 				= FALSE;
 	
 	var $page_data							= array();
-
+	
 	// --------------------------------------------------------------------
 
 	/**
@@ -146,27 +146,42 @@ class mb
 
 		// -------------------------------------
 		
+		//I think we may be able to delete this
 		$region_data = $_POST;
 
-		// -------------------------------------
+		// Was this submitted before and kicked back for a validation error?
+		// If so we need to go ahead and get some data.
+
+		if( isset($_POST['form_submit']) && $_POST['form_submit'] == 'true' ):
 		
-		// Return the render function
+			$form_data = $this->addon->blocks->clean_form_input_data( $_POST );
+		
+		endif;
+		
+		// Return the render function or process the form
 		
 		if ( $this->addon->form_validation->run() == FALSE ):
-		
-			if( method_exists($block, 'editor') ):
 			
-				echo $block->editor( $region_data );
+			// Did this get kicked back? Ok, we need some info to pass	
+			
+			if( isset($form_data) ): 
+			
+				$validation_data['field_values'] 	= $form_data['form_fields'];
+				$validation_data['errors']			= validation_errors();
 				
+				$this->addon->blocks->render_editor( $block->block_fields, $block->block_name, $region_data, $validation_data );
+			
 			else:
 			
-				echo $this->addon->blocks->render_editor( $block->block_fields, $block->block_name, $region_data );
+				$this->addon->blocks->render_editor( $block->block_fields, $block->block_name, $region_data );
 			
 			endif;
 		
 		else:
 		
-			// JS knows what to do with this one.
+			// So it's good. We just need to 
+			
+			$this->_form_process( $block, $form_data );
 			
 			echo 'BLOCKS_FORM_INPUT_SUCCESS';
 		
@@ -175,26 +190,13 @@ class mb
 
 	// --------------------------------------------------------------------
 
-	function form_process()
+	function _form_process( $blockm, $form_data )
 	{
-		$form_data = $_POST;
-		
-		// Glean the layout_id
-		
-		$layout_id = $this->addon->input->post('layout_id');
-		
-		unset($form_data['layout_id']);
-	
-		// Load the block as see if there is a process function
-	
-		$block = $this->addon->blocks->load_block( $form_data['block_type'] );
-
-		if( !$block )
-			return null;
-		
+		// We will use a block process function if there is one.
+			
 		if( method_exists($block, 'process_form') ):
 		
-			$processed = $block->process_form( $_POST );
+			$processed = $block->process_form( $form_data['form_fields'] );
 			
 			if( is_array($processed) ):
 			
@@ -206,9 +208,7 @@ class mb
 		
 		// Save the data
 		
-		$this->addon->blocks_mdl->save_block_data($form_data, $layout_id, $form_data['block_type']);
-		
-		echo "Success";
+		return $this->addon->blocks_mdl->save_block_data( $form_data );
 	}
 
 	// --------------------------------------------------------------------

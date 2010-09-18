@@ -72,16 +72,16 @@ class Blocks_mdl extends CI_Model {
 	 * @param	string
 	 * @return	bool
 	 */
-	function save_block_data( $form_data, $layout_id, $block_name )
+	function save_block_data( $form_data )
 	{
 		$block_data['updated'] 				= date('Y-m-d H:i:s');
-		$block_data['block_content']		= serialize( $form_data );
+		$block_data['block_content']		= serialize( $form_data['form_fields'] );
 
 		// See if we need to update or add
 		
 		$this->load->database();
 		
-		$this->db->where('layout_id', $layout_id);
+		$this->db->where('layout_id', $form_data['page_data']['layout_id']);
 		$obj = $this->db->get($this->table_name);
 		
 		if( $obj->num_rows() == 0 ):
@@ -89,10 +89,10 @@ class Blocks_mdl extends CI_Model {
 			// We need to add to the db
 			
 			$block_data['created'] 				= date('Y-m-d H:i:s');
-			$block_data['layout_id']			= $layout_id;
-			$block_data['block_type']			= $form_data['block_type'];
-			$block_data['page_url_title']		= $form_data['page_url_title'];
-			$block_data['block_id']				= $form_data['region_id'];
+			$block_data['layout_id']			= $form_data['page_data']['layout_id'];
+			$block_data['block_type']			= $form_data['page_data']['block_type'];
+			$block_data['page_url_title']		= $form_data['page_data']['page_url_title'];
+			$block_data['block_id']				= $form_data['page_data']['region_id'];
 			
 			$result = $this->db->insert($this->table_name, $block_data);
 		
@@ -100,7 +100,7 @@ class Blocks_mdl extends CI_Model {
 		
 			// We need to update
 
-			$this->db->where('layout_id', $layout_id);
+			$this->db->where('layout_id', $form_data['page_data']['layout_id']);
 			
 			$result = $this->db->update($this->table_name, $block_data);
 	

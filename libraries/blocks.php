@@ -12,6 +12,8 @@
  */
 class blocks
 {
+	var $clean_input						= array('layout_id', 'page_url_title', 'region_id', 'block_type');
+
 	function __construct()
 	{
 		$this->CI =& get_instance();
@@ -60,7 +62,7 @@ class blocks
 	 * @param	array
 	 * @return	string
 	 */
-	function render_editor( $fields, $name, $region_data )
+	function render_editor( $fields, $name, $region_data, $validation_data = array() )
 	{
 		$form_data = array();
 		
@@ -70,7 +72,7 @@ class blocks
 
 			$form_data['fields'][$count]['slug'] 	= $slug;
 			$form_data['fields'][$count]['label'] 	= $data['label'];
-			$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data );
+			$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data, $validation_data );
 					
 			$count++;		
 					
@@ -78,10 +80,24 @@ class blocks
 		
 		// We need some data
 		
+		// This can be replaced because we already have this data.
+		
 		$form_data['layout_id'] 		= $region_data['layout_id'];
 		$form_data['page_url_title']	= $region_data['page_url_title'];
 		$form_data['region_id']			= $region_data['region_id'];
 		$form_data['block_type']		= $region_data['block_type'];
+		
+		// Validation and errors
+		
+		if( $validation_data ):
+		
+			$form_data['errors'] = '<div class="errors">'.$validation_data['errors'].'</div>';
+	
+		else:
+		
+			$form_data['errors'] = null;
+		
+		endif;
 		
 		// We'll use the parser for this.
 		
@@ -106,7 +122,7 @@ class blocks
 	 * @param	array
 	 * @return	string
 	 */	
-	function _create_field( $slug, $data )
+	function _create_field( $slug, $data, $validation_data = array() )
 	{
 		$field = null;
 	
@@ -121,6 +137,16 @@ class blocks
 		$input_config['name'] 	= $slug;
 		$input_config['id']		= $slug;
 		
+		// If we have a value for this field, let's use it!
+		
+		if( isset($validation_data['field_values'][$slug]) ):
+		
+			$input_config['value']	= $validation_data['field_values'][$slug];
+		
+		endif;
+		
+		// Create the type of field we want
+		
 		switch( $data['type'] )
 		{
 			case "input":				
@@ -129,6 +155,45 @@ class blocks
 		
 		return $field;
 	}
+
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Clean form input data
+	 *
+	 * Takes the editor form data and returns a nice associative array:
+	 *
+	 * array('form_fields' => *, 'page_data' => *)
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return	array
+	 */
+	function clean_form_input_data( $post )
+	{
+		if( empty($post) )
+			return array();
+			
+		$return = array();
+		
+		$temp = $post;
+		
+		// Clean the layout_id & make something clean to send to the process function
+		
+		foreach( $this->clean_input as $input ):
+		
+			$return['page_data'][$input] = $post[$input];
+			
+			unset($temp[$input]);
+			
+		endforeach;
+		
+		$return['form_fields'] = $temp;
+		
+		return $return;
+	}
+
+	// --------------------------------------------------------------------------
 
 	/**
 	 * Loads a view.

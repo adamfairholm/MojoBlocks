@@ -59,13 +59,13 @@ function mb_form_submit()
         data_string += this.name+'='+$(this).val()+'&';
     });
     
-    data_string += Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf;
+    data_string += Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&form_submit=true';
 
 	jQuery.ajax({
 		dataType: "text",
 		type: "POST",
 		data: data_string,
-		url:  Mojo.URL.site_path+"/addons/mb/form_process",
+		url:  Mojo.URL.site_path+"/addons/mb/editor",
 		success: function(data){ $('#'+region_id).html(data); }
 	});
 }
