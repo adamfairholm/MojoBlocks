@@ -1,13 +1,29 @@
-mojoBlock = {
-	is_open: true,
-	is_active: false,
+mojoBlocks = {
+	are_open: true,
+	are_active: false,
 	region: "",
-	original_contents: "" // tracks region data, and is used to "cancel"
+	fallback_contents: []
 };
 
-mojoBlock.enable_block_regions = function ()
+// Scoopin' up all the content and boppin' 'em on the head
+
+mojoBlocks.gather_contents = function ()
 {
 	jQuery(".mojoblock_region").each(function () {
+
+		r_id = jQuery(this).attr('id');
+		mojoBlocks.fallback_contents[r_id] = jQuery('#'+r_id).html();
+
+	});
+}
+
+// Enable the mojoblock regions
+
+mojoBlocks.enable_block_regions = function ()
+{
+	jQuery(".mojoblock_region").each(function () {
+
+		// Add in the editable stuff
 	
 		block_editable = jQuery("<div class='mojoblock_editable_layer'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('fast');
 		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>"+$(this).attr('name')+"</p></div>")).prepend(block_editable);
@@ -15,23 +31,55 @@ mojoBlock.enable_block_regions = function ()
 	});
 };
 
+// Click to start the editor
+
 jQuery(".mojoblock_region").click(function () {
-	if (mojoBlock.is_open && mojoBlock.is_active === false)
+
+	if (mojoBlocks.are_open && mojoBlocks.are_active === false)
 	{
-		mojoBlock.is_active = true;
-		mojoBlock.init_editor(this);
+		mojoBlocks.are_active = true;
+		mojoBlocks.init_editor(this);
 	}
 });
 
-mojoBlock.enable_block_regions();
+// Once the page loads, load up the cache and enable the regions
 
-mojoBlock.init_editor = function (region) {
+mojoBlocks.gather_contents();
+
+mojoBlocks.enable_block_regions();
+	
+// Power down our blocks
+
+mojoBlocks.deactivate_blocks = function()
+{
+	jQuery(".mojoblock_region").each(function () {
+
+		// Remove the mojoblock_editable_layer class
+		
+		jQuery(this).removeClass('mojoblock_editable_layer');
+		
+	});
+}
+
+// Fire up the editor
+
+mojoBlocks.init_editor = function (region) {
+
+	// Need to remove all other regions
+	
+	mojoBlocks.deactivate_blocks();
+	
+	// Get some data
 
 	region_id = jQuery(region).attr('id');
 	block_type = jQuery(region).attr('name');
-
-	mojoBlock.region = region_id;
+	
+	mojoBlocks.region = region_id;
 	layout_id = Mojo.Vars.layout_id;
+	
+	//Get rid of the stuff we just put in there when we activated the mojoblock regions
+	
+	$('#'+region_id).empty();
 	
 	// Replace MB Region with editor
 		
@@ -44,6 +92,7 @@ mojoBlock.init_editor = function (region) {
 	});
 
 }
+
 
 // Submit the editor form
 
@@ -61,6 +110,8 @@ function mb_form_submit()
     
     data_string += Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&form_submit=true';
 
+	// Send out the request
+
 	jQuery.ajax({
 		dataType: "text",
 		type: "POST",
@@ -72,7 +123,13 @@ function mb_form_submit()
 
 // Cancel the editor
 
-function mb_form_cancel()
+function mb_form_cancel(region_id)
 {
+	mojoBlocks.are_active = true;
 	
+	$('#'+region_id).empty();
+
+	jQuery('#'+region_id).html(mojoBlocks.fallback_contents[region_id]);
+
+	mojoBlocks.enable_block_regions();
 }

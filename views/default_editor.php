@@ -16,5 +16,7 @@
 	<input type="hidden" name="block_type" id="block_type" value="{block_type}" />
 	
 	<p><button id="submit_button" onclick="mb_form_submit();">Submit</button></p>
+	
+	<p><a onclick="mb_form_cancel('{region_id}');">Cancel</a></p>
 
 </form>
