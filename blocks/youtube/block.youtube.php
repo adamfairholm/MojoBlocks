@@ -65,4 +65,4 @@ class block_youtube
 }
 
 /* End of file block.youtube.php */
-/* Location: system/mojomotor/third_party/block/blocks/block.youtube.php */
+/* Location: system/mojomotor/third_party/block/blocks/youtube/block.youtube.php */
