@@ -83,7 +83,7 @@ class mb
 		
 			$this->page_info = $this->addon->page_model->get_page_by_url_title($this->addon->mojomotor_parser->url_title);
 			
-			$this->page_data = $this->addon->blocks_mdl->retrieve_page_data( $this->page_info->url_title, $this->page_info->layout_id );
+			$this->page_data = $this->addon->blocks_mdl->retrieve_page_blocks( $this->page_info->url_title, $this->page_info->layout_id );
 		
 		endif;
 	}
@@ -141,9 +141,9 @@ class mb
 		$this->addon->load->helper('form');
 		
 		// Go through, set validation, and make the form fields.
-		
+
 		foreach( $block->block_fields as $slug => $data ):
-				
+		
 			$this->addon->form_validation->set_rules($slug, $data['label'], $data['validation']);
 					
 		endforeach;
@@ -161,9 +161,25 @@ class mb
 		if( isset($_POST['form_submit']) && $_POST['form_submit'] == 'true' ):
 		
 			$form_data = $this->addon->blocks->clean_form_input_data( $_POST );
+			
+			$validated = TRUE;
+			
+		else:
+		
+			// Otherwise, is this saved in the DB?
+			
+			$single_block = $this->addon->blocks_mdl->get_single_block( $region_data['page_url_title'], $region_data['layout_id'], $region_data['region_id'] );
+			
+			if( $single_block ):
+			
+				$form_data = $this->addon->blocks->clean_db_input_data( $single_block );
+			
+			endif;
 		
 		endif;
 		
+		$validated = FALSE;
+				
 		// Return the render function or process the form
 		
 		if ( $this->addon->form_validation->run() == FALSE ):
@@ -173,7 +189,7 @@ class mb
 			if( isset($form_data) ): 
 			
 				$validation_data['field_values'] 	= $form_data['form_fields'];
-				$validation_data['errors']			= validation_errors();
+				$validation_data['validated'] 		= $validated;
 				
 				$this->addon->blocks->render_editor( $block, $region_data, $validation_data );
 			
@@ -185,7 +201,7 @@ class mb
 		
 		else:
 		
-			// So it's good. We just need to 
+			// So it's good. We just need to process the form and add the data back in
 			
 			$this->_form_process( $block, $form_data );
 			

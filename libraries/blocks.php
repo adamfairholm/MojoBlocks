@@ -86,7 +86,7 @@ class blocks
 			
 			// If we have some validation data, let's show it
 			
-			if( $validation_data && form_error($slug) ):
+			if( $validation_data['validated'] == TRUE && form_error($slug) ):
 			
 				$form_data['fields'][$count]['error']	= form_error($slug);
 				
@@ -164,8 +164,30 @@ class blocks
 		switch( $data['type'] )
 		{
 			case "input":				
+			
 				$input_config['class'] = 'mojoblock_input';
+				
 				$field .= form_input( $input_config );
+				
+				break;
+				
+			case "dropdown":
+			
+				$additional = 'id="'.$input_config['id'].'" class="mojoblock_dropdown"';
+				
+				if( isset($input_config['value']) && $input_config['value'] ):
+				
+					$current = $input_config['value'];
+				
+				else:
+				
+					$current = null;
+				
+				endif;
+				
+				$field .= form_dropdown( $slug, $data['values'], $current );
+				
+				break;
 		}
 		
 		return $field;
@@ -204,6 +226,47 @@ class blocks
 		endforeach;
 		
 		$return['form_fields'] = $temp;
+		
+		return $return;
+	}
+
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Clean db input data
+	 *
+	 * Takes the database data and returns a nice associative array:
+	 *
+	 * array('form_fields' => *, 'page_data' => *)
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return	array
+	 */
+	function clean_db_input_data( $database_arr )
+	{
+		if( empty($database_arr) )
+			return array();
+			
+		$return = array();
+		
+		// Really need to figure out a way to not have to do this.
+		$database_arr['region_id'] = $database_arr['block_id'];
+		unset($database_arr['block_id']);
+		
+		$temp = $database_arr;
+				
+		// Clean the layout_id & make something clean to send to the process function
+		
+		foreach( $this->clean_input as $input ):
+		
+			$return['page_data'][$input] = $database_arr[$input];
+			
+			unset($temp[$input]);
+			
+		endforeach;
+		
+		$return['form_fields'] = $temp['block_content'];
 		
 		return $return;
 	}
