@@ -175,7 +175,7 @@ class mb
 			
 			else:
 			
-				$this->addon->blocks->render_editor( $block, $block->block_name, $region_data );
+				$this->addon->blocks->render_editor( $block, $region_data );
 			
 			endif;
 		
