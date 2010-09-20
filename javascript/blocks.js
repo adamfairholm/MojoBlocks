@@ -8,10 +8,10 @@ mojoBlock = {
 mojoBlock.enable_block_regions = function ()
 {
 	jQuery(".mojoblock_region").each(function () {
+	
+		block_editable = jQuery("<div class='mojoblock_editable_layer'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('fast');
+		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>"+$(this).attr('name')+"</p></div>")).prepend(block_editable);
 
-		//var bubble_name = jQuery(this).attr('id').replace("_", " ");
-
-		jQuery(this).prepend(jQuery("<div class='mojoblock_editable_layer'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('fast'));
 	});
 };
 
@@ -68,4 +68,11 @@ function mb_form_submit()
 		url:  Mojo.URL.site_path+"/addons/mb/editor",
 		success: function(data){ $('#'+region_id).html(data); }
 	});
+}
+
+// Cancel the editor
+
+function mb_form_cancel()
+{
+	
 }
