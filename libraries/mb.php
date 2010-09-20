@@ -143,6 +143,8 @@ class mb
 			$this->addon->form_validation->set_rules($slug, $data['label'], $data['validation']);
 					
 		endforeach;
+		
+		$this->addon->form_validation->set_error_delimiters('<p class="error">', '</p>');
 
 		// -------------------------------------
 		
@@ -169,11 +171,11 @@ class mb
 				$validation_data['field_values'] 	= $form_data['form_fields'];
 				$validation_data['errors']			= validation_errors();
 				
-				$this->addon->blocks->render_editor( $block->block_fields, $block->block_name, $region_data, $validation_data );
+				$this->addon->blocks->render_editor( $block, $region_data, $validation_data );
 			
 			else:
 			
-				$this->addon->blocks->render_editor( $block->block_fields, $block->block_name, $region_data );
+				$this->addon->blocks->render_editor( $block, $block->block_name, $region_data );
 			
 			endif;
 		
@@ -190,7 +192,7 @@ class mb
 
 	// --------------------------------------------------------------------
 
-	function _form_process( $blockm, $form_data )
+	function _form_process( $block, $form_data )
 	{
 		// We will use a block process function if there is one.
 			

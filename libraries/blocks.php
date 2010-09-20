@@ -62,21 +62,45 @@ class blocks
 	 * @param	array
 	 * @return	string
 	 */
-	function render_editor( $fields, $name, $region_data, $validation_data = array() )
+	function render_editor( $block, $region_data, $validation_data = array() )
 	{
 		$form_data = array();
 		
 		$count = 0;
 		
-		foreach( $fields as $slug => $data ):
+		// Let's build the heading:
+		
+		$img_url = SYSDIR.'/mojomotor/third_party/mb/views/themes/icons/'.$block->block_slug.'.png';
+		
+		$form_data['icon'] 				= '<img src="'.base_url().$img_url.'" alt="'.$block->block_name.'" />';
+		
+		$form_data['block_name']		= $block->block_name;
+		
+		// Let's grab the stuff for the editor and organize it
+		
+		foreach( $block->block_fields as $slug => $data ):
 
 			$form_data['fields'][$count]['slug'] 	= $slug;
 			$form_data['fields'][$count]['label'] 	= $data['label'];
 			$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data, $validation_data );
+			
+			// If we have some validation data, let's show it
+			
+			if( $validation_data && form_error($slug) ):
+			
+				$form_data['fields'][$count]['error']	= form_error($slug);
+				
+			else:
+			
+				$form_data['fields'][$count]['error']	= null;
+				
+			endif;
 					
 			$count++;		
 					
 		endforeach;
+		
+		// Let's 
 		
 		// We need some data
 		
@@ -86,19 +110,7 @@ class blocks
 		$form_data['page_url_title']	= $region_data['page_url_title'];
 		$form_data['region_id']			= $region_data['region_id'];
 		$form_data['block_type']		= $region_data['block_type'];
-		
-		// Validation and errors
-		
-		if( $validation_data ):
-		
-			$form_data['errors'] = '<div class="errors">'.$validation_data['errors'].'</div>';
-	
-		else:
-		
-			$form_data['errors'] = null;
-		
-		endif;
-		
+				
 		// We'll use the parser for this.
 		
 		$this->CI->load->library('parser');
@@ -126,13 +138,15 @@ class blocks
 	{
 		$field = null;
 	
-		//If we don't get a type, set it to "input"
+		// If we don't get a type, set it to "input"
 	
 		if( !isset($data['type']) || $data['type'] == '' ):
 		
 			$data['type'] = "input";
 		
 		endif;
+		
+		// Set our name and ID, that'll be the same for each.
 				
 		$input_config['name'] 	= $slug;
 		$input_config['id']		= $slug;
@@ -150,6 +164,7 @@ class blocks
 		switch( $data['type'] )
 		{
 			case "input":				
+				$input_config['class'] = 'mojoblock_input';
 				$field .= form_input( $input_config );
 		}
 		

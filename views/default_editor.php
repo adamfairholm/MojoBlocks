@@ -1,8 +1,10 @@
-<form method="post" id="mb_editor" onsubmit="return false;">
+<form class="mojoblocks_form" method="post" id="mb_editor" onsubmit="return false;">
 
-	{errors}
+	<h2>{icon} {block_name}</h2>
 
 	{fields}
+	
+		{error}
 	
 		<p><label for="{slug}">{label}</label> {input}</p>
 	
