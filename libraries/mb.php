@@ -52,19 +52,23 @@ class mb
 		
 		$this->addon->load->model('blocks_mdl');
 		
-		//Make sure that we load all the assets. But just once.
+		//Make sure that we load all the assets. But just once, and only if someone is signed in.
 		
-		if( $this->dependencies_loaded == FALSE ):
+		if( $this->addon->session->userdata('group_id') ):
 		
-			$assets = $this->_mb_dependencies();
+			if( $this->dependencies_loaded == FALSE ):
 			
-			foreach( $assets as $asset ):
-		
-				$this->addon->cp->appended_output[] = $asset;
+				$assets = $this->_mb_dependencies();
+				
+				foreach( $assets as $asset ):
 			
-			endforeach;
+					$this->addon->cp->appended_output[] = $asset;
+				
+				endforeach;
+				
+				$this->dependencies_loaded = TRUE;
 			
-			$this->dependencies_loaded = TRUE;
+			endif;
 		
 		endif;
 		
