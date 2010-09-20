@@ -32,7 +32,7 @@ class blocks
 	{
 		$block = strtolower($block);
 	
-		$filepath = APPPATH.'third_party/mb/blocks/';
+		$filepath = APPPATH.'third_party/mb/blocks/'.$block.'/';
 		
 		//If there is no file then...no
 		if( ! file_exists($filepath.'block.'.$block.EXT) ):
@@ -70,7 +70,7 @@ class blocks
 		
 		// Let's build the heading:
 		
-		$img_url = SYSDIR.'/mojomotor/third_party/mb/views/themes/icons/'.$block->block_slug.'.png';
+		$img_url = SYSDIR.'/mojomotor/third_party/mb/blocks/'.$block->block_slug.'/icon.png';
 		
 		$form_data['icon'] 				= '<img src="'.base_url().$img_url.'" alt="'.$block->block_name.'" />';
 		
