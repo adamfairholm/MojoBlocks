@@ -175,6 +175,20 @@ class mb
 				$form_data = $this->addon->blocks->clean_db_input_data( $single_block );
 			
 			endif;
+			
+			// Let's see if there is a form pre-process edit thing
+			
+			if( method_exists($block, 'pre_editor') ):
+			
+				$processed = $block->pre_editor( $form_data['form_fields'] );
+				
+				if( is_array($processed) ):
+				
+					$form_data['form_fields'] = $processed;
+				
+				endif;
+			
+			endif;
 		
 		endif;
 		
@@ -212,6 +226,14 @@ class mb
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Process the form data
+	 *
+	 * @access	public
+	 * @param	obj
+	 * @param	array
+	 * @return	bool
+	 */
 	function _form_process( $block, $form_data )
 	{
 		// We will use a block process function if there is one.
@@ -222,7 +244,7 @@ class mb
 			
 			if( is_array($processed) ):
 			
-				$form_data = $processed;
+				$form_data['form_fields'] = $processed;
 			
 			endif;
 		

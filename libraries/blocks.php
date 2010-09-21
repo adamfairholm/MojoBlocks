@@ -86,7 +86,7 @@ class blocks
 			
 			// If we have some validation data, let's show it
 			
-			if( $validation_data['validated'] == TRUE && form_error($slug) ):
+			if( isset($validation_data['validated']) && $validation_data['validated'] == TRUE && form_error($slug) ):
 			
 				$form_data['fields'][$count]['error']	= form_error($slug);
 				
@@ -187,6 +187,14 @@ class blocks
 				
 				$field .= form_dropdown( $slug, $data['values'], $current );
 				
+				break;
+			
+			case "textbox":
+
+				$input_config['class'] = 'mojoblock_textbox';
+			
+				$field .= form_textarea( $input_config );
+			
 				break;
 		}
 		

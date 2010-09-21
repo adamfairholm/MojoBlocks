@@ -105,6 +105,9 @@ class Blocks_mdl extends CI_Model {
 			// We need to update
 
 			$this->db->where('layout_id', $form_data['page_data']['layout_id']);
+			$this->db->where('page_url_title', $form_data['page_data']['page_url_title']);
+			$this->db->where('block_type', $form_data['page_data']['block_type']);
+			$this->db->where('block_id', $form_data['page_data']['region_id']);
 			
 			$result = $this->db->update($this->table_name, $block_data);
 	
@@ -147,6 +150,9 @@ class Blocks_mdl extends CI_Model {
 		$this->db->where('block_id', $region_id);
 	
 		$obj = $this->db->get( $this->table_name );
+		
+		if( $obj->num_rows() == 0 )
+			return FALSE;
 		
 		$block = $obj->row_array();
 		
