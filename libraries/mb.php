@@ -36,7 +36,7 @@ class mb
 
 		$method = $this->addon->uri->segment( 3 ); 
 
-		if( $method == 'css' || $method == 'js' ):
+		if( $method == 'css' || $method == 'js' || $method == 'images' ):
 			
 			$call_method = '_'.$method;
 		
@@ -297,6 +297,29 @@ class mb
 		header("Content-Type: text/css");
 	
 		echo file_get_contents( APPPATH . 'third_party/mb/views/themes/css/'.$file);
+	}
+	
+	function _images()
+	{
+		$file = $this->addon->uri->segment(4);
+		
+		$this->addon->load->helper('file');
+
+		$mime = get_mime_by_extension($file);
+		
+		//Is this even an image?
+		
+		if( strpos($mime, 'image') === FALSE )
+			return FALSE;
+		
+		header('Content-type: '.$mime);
+		
+		$img_file = APPPATH.'third_party/mb/views/themes/images/'.$file;
+
+		if ( file_exists($img_file) )
+		{
+			exit(file_get_contents($img_file));
+		}
 	}
 
 }

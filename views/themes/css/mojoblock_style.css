@@ -1,9 +1,20 @@
 .mojoblock_editable_layer {background: #066A99; border: 3px solid #003147; position:absolute; margin: -3px -6px; padding: 0px; cursor: pointer; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; opacity: 0.4;}
 
-form.mojoblocks_form {background: #F5F5F5; border: 1px solid #D4D4D4; -moz-border-radius: 7px; -webkit-border-radius: 7px; padding: 0 10px; font-size: 12px; color: #535353; margin-top: 5px;}
-button#submit_button {background: #FF7A14; color: #fff; border: none; padding: 5px 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px; cursor: pointer;}
+.mojoblock_edit {background: #F5F5F5; background-image: url(../images/bg_tile.gif); background-repeat: repeat-x; border: 1px solid #D4D4D4; -moz-border-radius: 7px; -webkit-border-radius: 7px; background-position: bottom left; overflow: hidden;}
+
+form.mojoblocks_form { padding: 0 10px; font-size: 12px; color: #535353; margin-top: 5px; }
 input.mojoblock_input {border: 1px solid #D3D3D3; padding: 4px; color: #8B8B8B;}
 form.mojoblocks_form h2 {font-size: 14px; color: #7C7C7C;}
 form.mojoblocks_form h2 img {margin-bottom: -6px; margin-right: 4px;}
 
-p.error {color: #EB3838; font-style: italic; font-size: 11px;}
+p.actions {float: left;}
+p.actions a {cursor: pointer;}
+
+blockquote {}
+
+table.mojoblocks_table {float: left;}
+table.mojoblocks_table td {padding: 4px;}
+
+.block_header {height: 43px; width: 100%; background-image: url(../images/header_bg.gif); background-repeat: repeat; -webkit-border-top-left-radius: 6px; -moz-border-top-left-radius: 6px; border-top-left-radius: 6px; -webkit-border-top-right-radius: 6px; -moz-border-top-right-radius: 6px; border-top-right-radius: 6px; padding-top: 7px; overflow: hidden;}
+.block_header img {float: left; padding-left: 10px; margin-right: 4px;}
+.block_header p.block_title {color: #fff !important; float: left; font-size: 14px !important; display: inline; font-weight: bold; margin-top: 7px;}
