@@ -1,4 +1,5 @@
 mojoBlocks = {
+	allow_editor_init: true,
 	are_open: true,
 	are_active: false,
 	region: "",
@@ -17,6 +18,17 @@ mojoBlocks.gather_contents = function ()
 	});
 }
 
+// Click to start the editor
+
+jQuery(".mojoblock_region").click(function () {
+
+	if (mojoBlocks.allow_editor_init)
+	{
+		mojoBlocks.allow_editor_init = false;
+		mojoBlocks.init_editor(this);
+	}
+});
+
 // Enable the mojoblock regions
 
 mojoBlocks.enable_block_regions = function ()
@@ -31,16 +43,6 @@ mojoBlocks.enable_block_regions = function ()
 	});
 };
 
-// Click to start the editor
-
-jQuery(".mojoblock_region").click(function () {
-
-	if (mojoBlocks.are_open && mojoBlocks.are_active === false)
-	{
-		mojoBlocks.are_active = true;
-		mojoBlocks.init_editor(this);
-	}
-});
 
 // Once the page loads, load up the cache and enable the regions
 
@@ -96,7 +98,7 @@ mojoBlocks.init_editor = function (region) {
 
 // Submit the editor form
 
-function mb_form_submit()
+function mb_form_submit(region_id)
 {
 	// Let's go through all the inputs.
 
@@ -117,19 +119,40 @@ function mb_form_submit()
 		type: "POST",
 		data: data_string,
 		url:  Mojo.URL.site_path+"/addons/mb/editor",
-		success: function(data){ $('#'+region_id).html(data); }
+		success: function(return_data){ 
+		
+			// Grab the new content
+			
+			if( return_data == 'BLOCKS_FORM_INPUT_FAILURE' )
+			{
+			}
+			else
+			{			
+				ajax_block_data = 'block_id='+return_data+'&'+Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf;
+			
+				jQuery.ajax({
+					dataType: "text",
+					type: "POST",
+					data: ajax_block_data,
+					url:  Mojo.URL.site_path+"/addons/mb/ajax_block",
+					
+						success: function(new_data){ $('#'+region_id).html(new_data); mojoBlocks.enable_block_regions(); }
+					
+					})
+			}
+		 }
 	});
 }
 
 // Cancel the editor
 
 function mb_form_cancel(region_id)
-{
-	mojoBlocks.are_active = true;
-	
+{	
 	$('#'+region_id).empty();
 
 	jQuery('#'+region_id).html(mojoBlocks.fallback_contents[region_id]);
 
 	mojoBlocks.enable_block_regions();
+
+	mojoBlocks.allow_editor_init = true;
 }

@@ -119,6 +119,33 @@ class mb
 	// --------------------------------------------------------------------
 	
 	/**
+	 * Displays block via AJAX call
+	 */
+	function ajax_block()
+	{
+		$block_id = $this->addon->input->post('block_id');
+
+		if( ! $block_id || ! is_numeric($block_id) )
+			return FALSE;
+		
+		// Get block data
+		
+		$block_data = $this->addon->blocks_mdl->get_single_block_by_id( $block_id );
+		
+		if( $block_data ):
+		
+			// Load and render block
+			
+			$block = $this->addon->blocks->load_block( $block_data['block_type'] );
+
+			echo $block->render( $block_data['block_content'] );
+	
+		endif;
+	}
+	
+	// --------------------------------------------------------------------
+	
+	/**
 	 * Displays the editor for the block. Accessed via AJAX.
 	 *
 	 * @access	public
@@ -205,6 +232,14 @@ class mb
 				$validation_data['field_values'] 	= $form_data['form_fields'];
 				$validation_data['validated'] 		= $validated;
 				
+				// Pass the row ID if we need to
+				
+				if( isset($form_data['page_data']['row_id']) ):
+				
+					$region_data['row_id'] = $form_data['page_data']['row_id'];
+				
+				endif;
+				
 				$this->addon->blocks->render_editor( $block, $region_data, $validation_data );
 			
 			else:
@@ -217,9 +252,17 @@ class mb
 		
 			// So it's good. We just need to process the form and add the data back in
 			
-			$this->_form_process( $block, $form_data );
+			$result = $this->_form_process( $block, $form_data );
 			
-			echo 'BLOCKS_FORM_INPUT_SUCCESS';
+			if( $result && is_numeric($result) ):
+			
+				echo $result;
+			
+			else:
+			
+				echo 'BLOCKS_FORM_INPUT_FAILURE';
+			
+			endif;
 		
 		endif;
 	}

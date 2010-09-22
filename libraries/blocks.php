@@ -12,7 +12,7 @@
  */
 class blocks
 {
-	var $clean_input						= array('layout_id', 'page_url_title', 'region_id', 'block_type');
+	var $clean_input						= array('layout_id', 'page_url_title', 'region_id', 'block_type', 'row_id');
 
 	function __construct()
 	{
@@ -110,6 +110,18 @@ class blocks
 		$form_data['page_url_title']	= $region_data['page_url_title'];
 		$form_data['region_id']			= $region_data['region_id'];
 		$form_data['block_type']		= $region_data['block_type'];
+		
+		// Do the row ID if we have it
+		
+		if( isset($region_data['row_id']) ):
+		
+			$form_data['row_id']	= $region_data['row_id'];
+			
+		else:
+		
+			$form_data['row_id']	= "NA";
+		
+		endif;
 				
 		// We'll use the parser for this.
 		
@@ -268,11 +280,19 @@ class blocks
 		
 		foreach( $this->clean_input as $input ):
 		
-			$return['page_data'][$input] = $database_arr[$input];
+			if( $input != 'row_id' ):
+		
+				$return['page_data'][$input] = $database_arr[$input];
+				
+				unset($temp[$input]);
 			
-			unset($temp[$input]);
+			endif;
 			
 		endforeach;
+		
+		// We want the row_id this time
+		
+		$return['page_data']['row_id'] = $database_arr['id'];
 		
 		$return['form_fields'] = $temp['block_content'];
 		

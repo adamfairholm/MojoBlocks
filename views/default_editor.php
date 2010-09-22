@@ -27,13 +27,14 @@
 	<input type="hidden" name="page_url_title" id="page_url_title" value="{page_url_title}" />
 	<input type="hidden" name="region_id" id="region_id" value="{region_id}" />
 	<input type="hidden" name="block_type" id="block_type" value="{block_type}" />
+	<input type="hidden" name="row_id" id="row_id" value="{row_id}" />
 	
 	</div>
 	
 	<p class="actions">
 		
-		<a onclick="mb_form_submit();"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/submit_button.gif" alt="Submit" /></a>
-		<a onclick="mb_form_cancel('{region_id}');"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/cancel_button.gif" alt="Cancel" /></a>
+		<a onclick="mb_form_submit('{region_id}');"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/submit_button.gif" alt="Submit" /></a>
+		<a id="cancel" onclick="mb_form_cancel('{region_id}');"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/cancel_button.gif" alt="Cancel" /></a>
 		
 	</p>
 

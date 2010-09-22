@@ -99,21 +99,41 @@ class Blocks_mdl extends CI_Model {
 			$block_data['block_id']				= $form_data['page_data']['region_id'];
 			
 			$result = $this->db->insert($this->table_name, $block_data);
+			
+			$operation = 'insert';
 		
 		else:
 		
 			// We need to update
-
-			$this->db->where('layout_id', $form_data['page_data']['layout_id']);
-			$this->db->where('page_url_title', $form_data['page_data']['page_url_title']);
-			$this->db->where('block_type', $form_data['page_data']['block_type']);
-			$this->db->where('block_id', $form_data['page_data']['region_id']);
+			
+			$this->db->where('id', $form_data['page_data']['row_id']);
 			
 			$result = $this->db->update($this->table_name, $block_data);
+			
+			$operation = 'update';
 	
 		endif;
 		
-		return $result;
+		// Return ID or FALSE
+		
+		if( $result ):
+		
+			if( $operation == 'insert' ):
+		
+				return $this->db->insert_id();
+			
+			else:
+			
+				return $form_data['page_data']['row_id'];
+				
+			endif;
+			
+		else:
+		
+			return FALSE;
+		
+		endif;
+		
 	}
 
 	// --------------------------------------------------------------------------
@@ -141,6 +161,22 @@ class Blocks_mdl extends CI_Model {
 		endforeach;
 		
 		return $return;
+	}
+	
+	function get_single_block_by_id( $id )
+	{
+		$this->db->where('id', $id);
+	
+		$obj = $this->db->get( $this->table_name );
+		
+		if( $obj->num_rows() == 0 )
+			return FALSE;
+		
+		$block = $obj->row_array();
+		
+		$block['block_content'] = unserialize($block['block_content']);
+		
+		return $block;
 	}
 	
 	function get_single_block( $page_url_title, $layout_id, $region_id )
