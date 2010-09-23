@@ -138,6 +138,14 @@ class Blocks_mdl extends CI_Model {
 
 	// --------------------------------------------------------------------------
 
+	/**
+	 * Get all the blocks for a given page from the url title and layout id
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	int
+	 * @return	array
+	 */
 	function retrieve_page_blocks( $page_url_title, $layout_id )
 	{
 		$this->db->where('page_url_title', $page_url_title);
@@ -147,7 +155,7 @@ class Blocks_mdl extends CI_Model {
 		
 		$data = $obj->result_array();
 		
-		//Go through and make a pretty array
+		// Go through and make a pretty array
 		
 		$return = array();
 		
@@ -157,28 +165,24 @@ class Blocks_mdl extends CI_Model {
 			$return[$row['block_id']]['block_content'] 		= unserialize($row['block_content']);
 			$return[$row['block_id']]['page_url_title'] 	= $row['page_url_title'];
 			$return[$row['block_id']]['layout_id'] 			= $row['layout_id'];
+			$return[$row['block_id']]['row_id'] 			= $row['id'];
 		
 		endforeach;
 		
 		return $return;
 	}
-	
-	function get_single_block_by_id( $id )
-	{
-		$this->db->where('id', $id);
-	
-		$obj = $this->db->get( $this->table_name );
-		
-		if( $obj->num_rows() == 0 )
-			return FALSE;
-		
-		$block = $obj->row_array();
-		
-		$block['block_content'] = unserialize($block['block_content']);
-		
-		return $block;
-	}
-	
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Get the data for a single block by non-ID data
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	int
+	 * @param	int
+	 * @return	array
+	 */
 	function get_single_block( $page_url_title, $layout_id, $region_id )
 	{
 		$this->db->where('page_url_title', $page_url_title);
@@ -197,7 +201,32 @@ class Blocks_mdl extends CI_Model {
 		return $block;
 	}
 
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Get the data for a single block.
+	 *
+	 * @access	public
+	 * @param	int
+	 * @return	array
+	 */
+	function get_single_block_by_id( $id )
+	{
+		$this->db->where('id', $id);
+	
+		$obj = $this->db->get( $this->table_name );
+		
+		if( $obj->num_rows() == 0 )
+			return FALSE;
+		
+		$block = $obj->row_array();
+		
+		$block['block_content'] = unserialize($block['block_content']);
+		
+		return $block;
+	}
+
 }
 
 /* End of file blocks_mdl.php */
-/* Location: /third_party/block/models/blocks_mdl.php */
+/* Location: /third_party/mb/block/models/blocks_mdl.php */

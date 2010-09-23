@@ -47,12 +47,20 @@ class mb
 		endif;
 
 		// -------------------------------------
+		// Load our code assets
+		// -------------------------------------
 		
 		$this->addon->load->library('Blocks');
 		
+		$this->addon->lang->load('mb', '', FALSE, TRUE, APPPATH.'third_party/mb/');
+		
 		$this->addon->load->model('blocks_mdl');
 		
-		//Make sure that we load all the assets. But just once, and only if someone is signed in.
+		// -------------------------------------
+		// Load JS and CSS assets
+		// -------------------------------------
+		// But just once, and only if someone is signed in.
+		// -------------------------------------
 		
 		if( $this->addon->session->userdata('group_id') ):
 		
@@ -71,13 +79,21 @@ class mb
 			endif;
 		
 		endif;
-		
-		//We need a database table. Since everything is supposed to be super simple, why not just check for it
-		//and install it if we don't see it there. Everyone is happy and sugar cubes for dinner.
+
+		// -------------------------------------
+		// Check for DB
+		// -------------------------------------
+		// We need a database table. Since everything is supposed to be super simple, why not just check for it
+		// and install it if we don't see it there. Everyone is happy and sugar cubes for dinner.
+		// -------------------------------------
 		
 		$this->addon->blocks_mdl->check_database();	
 		
+		// -------------------------------------
+		// Load Page Assets
+		// -------------------------------------
 		// If we are loading a MojoMotor page, let's get the data
+		// -------------------------------------
 		
 		if( class_exists('Page_model') ):
 		
@@ -91,15 +107,24 @@ class mb
 	// --------------------------------------------------------------------
 
 	/**
-	 * Displays a specific block
+	 * Renders a specific block based on the tag data
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return 	string
 	 */
 	function block( $tag_data = array() )
 	{
-		// Load up the block
+		// -------------------------------------		
+		// Load the block
+		// -------------------------------------		
 		
 		$block = $this->addon->blocks->load_block($tag_data['parameters']['type']);
-		
+
+		// -------------------------------------				
 		// Get the data if there is any
+		// Else, return a description of the 
+		// -------------------------------------		
 		
 		if( isset($this->page_data[$tag_data['parameters']['id']]) ):
 		
@@ -107,38 +132,76 @@ class mb
 			
 		else:
 		
-			$block_data = array();
+			return '<p>'.$block->block_name.': '.$this->block_desc.'</p>';
 		
 		endif;
 		
-		// Return the render function
+		// -------------------------------------				
+		// Return the block render output to the page
+		// -------------------------------------
 		
-		return $block->render( $block_data );
+		if( method_exists($block, 'render') ):
+
+			return $block->render( $block_data );
+		
+		else:
+		
+			return $this->show_error( 'no_render_function' );
+		
+		endif;
 	}
 	
 	// --------------------------------------------------------------------
 	
 	/**
 	 * Displays block via AJAX call
+	 *
+	 * @access	public
+	 * @return	void
 	 */
 	function ajax_block()
 	{
-		$block_id = $this->addon->input->post('block_id');
-
-		if( ! $block_id || ! is_numeric($block_id) )
-			return FALSE;
+		// -------------------------------------
+		// Retrieve and validate POST data
+		// -------------------------------------
 		
+		$block_id = $this->addon->input->post('block_id');
+		
+		if( ! $block_id ):
+		
+			echo $this->show_error( 'invalid_post_data' );
+		
+		endif;
+
+		// -------------------------------------
+		// Validate ID
+		// -------------------------------------
+
+		if( ! $block_id || ! is_numeric($block_id) ):
+		
+			echo $this->show_error( 'invalid_block_id' );
+		
+		endif;
+		
+		// -------------------------------------
 		// Get block data
+		// -------------------------------------
 		
 		$block_data = $this->addon->blocks_mdl->get_single_block_by_id( $block_id );
+
+		// -------------------------------------
+		// Load and render block, or return error
+		// -------------------------------------
 		
 		if( $block_data ):
 		
-			// Load and render block
-			
 			$block = $this->addon->blocks->load_block( $block_data['block_type'] );
 
 			echo $block->render( $block_data['block_content'] );
+	
+		else:
+		
+			echo $this->show_error( 'invalid_block_id' );
 	
 		endif;
 	}
@@ -153,11 +216,29 @@ class mb
 	 */
 	function editor()
 	{
+		// -------------------------------------
+		// Retrieve and validate POST data
+		// -------------------------------------
+		
 		$block = $this->addon->input->post('block_type');
 		
-		// Load up the block
+		if( ! $block ):
+		
+			echo $this->show_error( 'invalid_post_data' );
+		
+		endif;
+		
+		// -------------------------------------
+		// Load Block
+		// -------------------------------------
 		
 		$block = $this->addon->blocks->load_block($block);
+		
+		if( ! $block ):
+		
+			echo $this->show_error( 'failed_to_load_block' );
+		
+		endif;
 		
 		// -------------------------------------
 		// Validation
@@ -167,7 +248,9 @@ class mb
 		
 		$this->addon->load->helper('form');
 		
-		// Go through, set validation, and make the form fields.
+		// -------------------------------------
+		// Set validation and create form fields
+		// -------------------------------------
 
 		foreach( $block->block_fields as $slug => $data ):
 		
@@ -178,12 +261,11 @@ class mb
 		$this->addon->form_validation->set_error_delimiters('<p class="error">', '</p>');
 
 		// -------------------------------------
-		
-		//I think we may be able to delete this
-		$region_data = $_POST;
-
 		// Was this submitted before and kicked back for a validation error?
 		// If so we need to go ahead and get some data.
+		// -------------------------------------
+
+		$validated = FALSE;
 
 		if( isset($_POST['form_submit']) && $_POST['form_submit'] == 'true' ):
 		
@@ -192,36 +274,54 @@ class mb
 			$validated = TRUE;
 			
 		else:
-		
+
+			// -------------------------------------		
 			// Otherwise, is this saved in the DB?
+			// -------------------------------------
 			
-			$single_block = $this->addon->blocks_mdl->get_single_block( $region_data['page_url_title'], $region_data['layout_id'], $region_data['region_id'] );
+			$single_block = $this->addon->blocks_mdl->get_single_block(
+					$this->addon->input->post('page_url_title'),
+					$this->addon->input->post('layout_id'),
+					$this->addon->input->post('region_id')
+				);
 			
 			if( $single_block ):
 			
 				$form_data = $this->addon->blocks->clean_db_input_data( $single_block );
-			
-			endif;
-			
-			// Let's see if there is a form pre-process edit thing
-			
-			if( method_exists($block, 'pre_editor') ):
-			
-				$processed = $block->pre_editor( $form_data['form_fields'] );
+
+				// -------------------------------------			
+				// Form pre-editng processing
+				// -------------------------------------			
+				// If this is saved in the DB, then we 
+				// can run it through the pre-processor
+				// in the block if defined. 			
+				// -------------------------------------
 				
-				if( is_array($processed) ):
+				if( method_exists($block, 'pre_editor') ):
 				
-					$form_data['form_fields'] = $processed;
-				
+					$processed = $block->pre_editor( $form_data['form_fields'] );
+					
+					if( is_array($processed) ):
+					
+						$form_data['form_fields'] = $processed;
+					
+					endif;
+							
 				endif;
-			
-			endif;
-		
-		endif;
-		
-		$validated = FALSE;
 				
+				// -------------------------------------
+		
+			endif;
+
+			// -------------------------------------
+
+		endif;
+				
+		// -------------------------------------
+		// Form Validation and Processing
+		// -------------------------------------
 		// Return the render function or process the form
+		// -------------------------------------
 		
 		if ( $this->addon->form_validation->run() == FALSE ):
 			
@@ -236,15 +336,15 @@ class mb
 				
 				if( isset($form_data['page_data']['row_id']) ):
 				
-					$region_data['row_id'] = $form_data['page_data']['row_id'];
+					$_POST['row_id'] = $form_data['page_data']['row_id'];
 				
 				endif;
 				
-				$this->addon->blocks->render_editor( $block, $region_data, $validation_data );
+				$this->addon->blocks->render_editor( $block, $_POST, $validation_data );
 			
 			else:
 			
-				$this->addon->blocks->render_editor( $block, $region_data );
+				$this->addon->blocks->render_editor( $block, $_POST );
 			
 			endif;
 		
@@ -318,6 +418,9 @@ class mb
 
 	/**
 	 * Output a JS file. Just like that.
+	 *
+	 * @access	private
+	 * @return	js
 	 */
 	function _js()
 	{
@@ -332,6 +435,9 @@ class mb
 
 	/**
 	 * Output a CSS file. Also just like that.
+	 *
+	 * @access	private
+	 * @return	css
 	 */
 	function _css()
 	{
@@ -341,7 +447,15 @@ class mb
 	
 		echo file_get_contents( APPPATH . 'third_party/mb/views/themes/css/'.$file);
 	}
-	
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Output a IMG file.
+	 *
+	 * @access	private
+	 * @return	img
+	 */
 	function _images()
 	{
 		$file = $this->addon->uri->segment(4);
@@ -365,6 +479,20 @@ class mb
 		}
 	}
 
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Display an error
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	[string]
+	 * @return	string
+	 */
+	function show_error( $error, $tag = 'p' )
+	{
+		return "<$tag>".$this->addon->lang->line('mb_error').': '.$this->addon->lang->line('mb_error_'.$error)."</$tag>";
+	}
 }
 
 /* End of file mb.php */

@@ -8,6 +8,11 @@ mojoBlocks = {
 
 // Scoopin' up all the content and boppin' 'em on the head
 
+function is_numeric(input)
+{
+   return (input - 0) == input && input.length > 0;
+}
+
 mojoBlocks.gather_contents = function ()
 {
 	jQuery(".mojoblock_region").each(function () {
@@ -120,11 +125,16 @@ function mb_form_submit(region_id)
 		data: data_string,
 		url:  Mojo.URL.site_path+"/addons/mb/editor",
 		success: function(return_data){ 
-		
+
 			// Grab the new content
 			
 			if( return_data == 'BLOCKS_FORM_INPUT_FAILURE' )
 			{
+				alert('an_error');
+			}
+			else if( is_numeric(return_data) == false )
+			{
+				$('#'+region_id).html(return_data);
 			}
 			else
 			{			
