@@ -52,6 +52,8 @@ class mb
 		
 		$this->addon->load->library('Blocks');
 		
+		$this->addon->load->helper('block');
+		
 		$this->addon->lang->load('mb', '', FALSE, TRUE, APPPATH.'third_party/mb/');
 		
 		$this->addon->load->model('blocks_mdl');
@@ -165,7 +167,7 @@ class mb
 		// Retrieve and validate POST data
 		// -------------------------------------
 		
-		$block_id = $this->addon->input->post('block_id');
+		echo $block_id = $this->addon->input->post('block_id');
 		
 		if( ! $block_id ):
 		

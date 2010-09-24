@@ -162,7 +162,7 @@ class Blocks_mdl extends CI_Model {
 		foreach( $data as $row ):
 		
 			$return[$row['block_id']]['block_type'] 		= $row['block_type'];
-			$return[$row['block_id']]['block_content'] 		= unserialize($row['block_content']);
+			$return[$row['block_id']]['block_content'] 		= unserialize($row['block_content']);			
 			$return[$row['block_id']]['page_url_title'] 	= $row['page_url_title'];
 			$return[$row['block_id']]['layout_id'] 			= $row['layout_id'];
 			$return[$row['block_id']]['row_id'] 			= $row['id'];
