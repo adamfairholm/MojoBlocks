@@ -208,6 +208,36 @@ class blocks
 				$field .= form_textarea( $input_config );
 			
 				break;
+				
+			case "layout":
+
+				if( isset($input_config['value']) && $input_config['value'] ):
+				
+					$current = $input_config['value'];
+				
+				else:
+				
+					$current = null;
+				
+				endif;
+				
+				// Load the layouts model and get layouts.
+				
+				$this->CI->load->model('layout_model');
+
+				$layouts['default'] = 'Block Default';
+				
+				$layout_obj = $this->CI->layout_model->get_layouts();
+				
+				$temp = $layout_obj->result_array();
+				
+				foreach( $temp as $item ):
+				
+					$layouts[$item['id']] = $item['layout_name'];
+				
+				endforeach;
+			
+				$field .= form_dropdown( $slug, $layouts, $current );
 		}
 		
 		return $field;
@@ -306,23 +336,23 @@ class blocks
 	 *
 	 * This one is from Dan Horrigan's Equipment MojoMotor addon.
 	 *
-	 * @access	private
-	 * @param	string	The view to load MUST include the folder (i.e. views/index)
+	 * @access	public
+	 * @param	string
 	 * @param	array	The data for the view
 	 * @param	bool	Where to return the results
 	 * @return	string	The view contents
 	 */
-	private function load_view($view, $data = array(), $return = TRUE)
+	function load_view($view, $data = array(), $view_path = 'views/')
 	{
 		$orig_view_path = $this->CI->load->_ci_view_path;
 		
-		$this->CI->load->_ci_view_path = APPPATH.'third_party/mb/views/';
+		$this->CI->load->_ci_view_path = APPPATH.'third_party/mb/'.$view_path;
 
-		$return = $this->CI->load->view($view, $data, $return);
+		$view_result = $this->CI->load->view($view, $data, TRUE);
 
 		$this->CI->load->_ci_view_path = $orig_view_path;
 
-		return $return;
+		return $view_result;
 	}
 
 }
