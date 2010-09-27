@@ -167,7 +167,7 @@ class mb
 		// Retrieve and validate POST data
 		// -------------------------------------
 		
-		echo $block_id = $this->addon->input->post('block_id');
+		$block_id = $this->addon->input->post('block_id');
 		
 		if( ! $block_id ):
 		
