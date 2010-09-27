@@ -23,9 +23,13 @@ class Blocks_mdl extends CI_Model {
 		'created'					=> array('type' => 'DATETIME'),
 		'updated'					=> array('type' => 'DATETIME'),
 		'block_type'				=> array('type' => 'VARCHAR', 'constraint' => '50'),
+		'block_id'					=> array('type' => 'VARCHAR', 'constraint' => '100'),
 		'block_content'				=> array('type' => 'BLOB'),
 		'page_url_title'			=> array('type' => 'VARCHAR', 'constraint' => '100'),
-		'layout_id'					=> array('type' => 'INT', 'constraint' => '5')
+		'layout_id'					=> array('type' => 'INT', 'constraint' => '5'),
+		'cache'						=> array('type' => 'LONGBLOB'),
+		'cache_process'				=> array('type' => 'VARCHAR', 'constraint' => '200'),
+		'cache_expire'				=> array('type' => 'VARCHAR', 'constraint' => '60')
 	);
 
    // --------------------------------------------------------------------------
@@ -107,6 +111,8 @@ class Blocks_mdl extends CI_Model {
 			// We need to update
 			
 			$this->db->where('id', $form_data['page_data']['row_id']);
+
+			$block_data['cache']				= ''; // Wipe out the cache
 			
 			$result = $this->db->update($this->table_name, $block_data);
 			
@@ -166,6 +172,9 @@ class Blocks_mdl extends CI_Model {
 			$return[$row['block_id']]['page_url_title'] 	= $row['page_url_title'];
 			$return[$row['block_id']]['layout_id'] 			= $row['layout_id'];
 			$return[$row['block_id']]['row_id'] 			= $row['id'];
+			$return[$row['block_id']]['cache'] 				= $row['cache'];
+			$return[$row['block_id']]['cache_process'] 		= $row['cache_process'];
+			$return[$row['block_id']]['cache_expire'] 		= $row['cache_expire'];
 		
 		endforeach;
 		

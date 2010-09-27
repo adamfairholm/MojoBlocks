@@ -17,6 +17,7 @@ class block_twitter_stream
 	var $block_slug				= "twitter_stream";
 	
 	var $block_desc				= "Show tweets from a user";
+			
 
 	var $block_fields			= array(
 		'twitter_name' 	=> array(
@@ -31,6 +32,16 @@ class block_twitter_stream
 				'validation'	=> "required"
 		)
 	);
+
+	// --------------------------------------------------------------------
+	// Cache variables
+	// --------------------------------------------------------------------
+
+	var $cache_output			= TRUE;
+
+	var $cache_expire			= '+1 hour';
+
+	var $cache_data				= '';
 
 	// --------------------------------------------------------------------
 
@@ -55,8 +66,8 @@ class block_twitter_stream
 	 * @return 	string
 	 */
 	function render( $block_data )
-	{
-		$tweets = json_decode(file_get_contents('http://twitter.com/statuses/user_timeline/'.$block_data['twitter_name'].'.json?count='.$block_data['num_of_tweets']));
+	{	
+		$tweets = $this->cache_data_call( $block_data );
 		
 		if( ! $tweets )
 			return "<p>Tweets didn't load.</p>";
@@ -129,6 +140,30 @@ class block_twitter_stream
 		$template_data['tweets'] = $twitter_data;
 		
 		return parse_block_template( $this->block_slug, $template_data, $block_data['layout'] );
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Cache data call
+	 *
+	 * Exists if you want to cache JUST a small piece of data and still
+	 * call the render() function
+	 *
+	 * @access	public
+	 * @return	mixed
+	 */
+	function cache_data_call( $block_data )
+	{
+		if( $this->cache_data ):
+			
+			return $this->cache_data;
+		
+		else:
+		
+			return json_decode(file_get_contents('http://twitter.com/statuses/user_timeline/'.$block_data['twitter_name'].'.json?count='.$block_data['num_of_tweets']));
+	
+		endif;
 	}
 
 	// --------------------------------------------------------------------

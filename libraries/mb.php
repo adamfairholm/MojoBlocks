@@ -53,6 +53,8 @@ class mb
 		$this->addon->load->library('Blocks');
 		
 		$this->addon->load->helper('block');
+
+		$this->addon->load->helper('cache');
 		
 		$this->addon->lang->load('mb', '', FALSE, TRUE, APPPATH.'third_party/mb/');
 		
@@ -132,19 +134,69 @@ class mb
 		
 			$block_data = $this->page_data[$tag_data['parameters']['id']]['block_content'];
 			
+			// -------------------------------------		
+			// Cache
+			// -------------------------------------
+			
+			// Is cache enabled for this block?
+			
+			if( isset($block->cache_output) && $block->cache_output == TRUE  ):
+			
+				// See if the cache is valid, if so, return the cache
+			
+				$cache = validate_cache( $this->page_data[$tag_data['parameters']['id']]['cache'], $this->page_data[$tag_data['parameters']['id']]['cache_process'], $this->page_data[$tag_data['parameters']['id']]['cache_expire'] );
+				
+				if( $cache ):
+				
+					// See if this is page cache or a function cache
+					
+					if( method_exists($block, 'cache_data_call') ):
+					
+						// This has a cache data call, so before we call the render function below
+						// we need to set the cache data in the class to the cache data
+						
+						$block->cache_data = $cache;
+						
+						// That is all we need to do, the render function will do the rest.
+					
+					else:
+					
+						// This is a page cache output, and we can just end it here by
+						// sending back the full cached rendered data and bypass render()
+
+						return $cache;
+										
+					endif;
+				
+				endif;
+			
+			endif;
+			
 		else:
 		
 			return '<p>'.$block->block_name.': '.$this->block_desc.'</p>';
 		
 		endif;
 		
+		// -------------------------------------
+		// Block Render
 		// -------------------------------------				
 		// Return the block render output to the page
 		// -------------------------------------
 		
 		if( method_exists($block, 'render') ):
 
-			return $block->render( $block_data );
+			$rendered_output = $block->render( $block_data );
+			
+			// If the cache is invalid, let's write a new one
+			
+			if( $cache === FALSE ):
+			
+				write_cache( $block, $rendered_output, $this->page_data[$tag_data['parameters']['id']]['row_id'], $block_data );
+			
+			endif;
+			
+			return $rendered_output;
 		
 		else:
 		
