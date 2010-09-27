@@ -52,10 +52,10 @@ function parse_block_template( $block_slug, $template_data = array(), $template_
 	// Deal with Templates
 	// -------------------------------------
 
-	// If the template is null, go with the default. But make sure it exists first
+	// If the template is null or default, go with the default. But make sure it exists first
 	
-	if( $template_name == '' && file_exists($CI->load->_ci_view_path.'layout.php')){
-	
+	if( ( $template_name == '' || $template_name == 'default' ) && file_exists($CI->load->_ci_view_path.'layout.php'))
+	{
 		$template_name = 'layout';
 
 		$parsed_template = $CI->parser->parse( $template_name, $template_data, TRUE );
@@ -88,8 +88,6 @@ function parse_block_template( $block_slug, $template_data = array(), $template_
 			$parsed_template = $CI->parser->parse_string( $template_arr['layout_content'], $template_data, TRUE );
 		}
 	
-	} else if( $template_name ) {
-
 	} else {
 
 		// Looks like there is nothing..so..I guess...just blank it?
