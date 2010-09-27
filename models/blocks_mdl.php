@@ -79,6 +79,10 @@ class Blocks_mdl extends CI_Model {
 	function save_block_data( $form_data )
 	{
 		$block_data['updated'] 				= date('Y-m-d H:i:s');
+		
+		// Remove 'form_submit' before we serialize so it doesn't get saved
+		unset($form_data['form_fields']['form_submit']);
+		
 		$block_data['block_content']		= serialize( $form_data['form_fields'] );
 
 		// See if we need to update or add
