@@ -11,6 +11,8 @@
 class block_youtube
 {
 	var $block_name				= "YouTube Embed";
+
+	var $block_version			= "v1.0";
 	
 	var $block_slug				= "youtube";
 	
@@ -52,17 +54,55 @@ class block_youtube
 	 */
 	function render( $block_data )
 	{
-		if( empty($block_data) )
-			return "YouTube Embed";
-	
-		$youtube_embed = '<object width="'.$block_data['width'].'" height="'.$block_data['width'].'"><param name="movie" value="http://www.youtube.com/v/'.$block_data['youtube_data'].'?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/'.$block_data['youtube_data'].'?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="'.$block_data['width'].'" height="'.$block_data['height'].'"></embed></object>';
+		$youtube_id = $this->clean_youtube_input( $block_data['youtube_data'] );
+		
+		if( !$youtube_id )
+			return "Error";
+		
+		$youtube_embed = '<object width="'.$block_data['width'].'" height="'.$block_data['width'].'"><param name="movie" value="http://www.youtube.com/v/'.$youtube_id.'?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/'.$youtube_id.'?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="'.$block_data['width'].'" height="'.$block_data['height'].'"></embed></object>';
 		
 		return $youtube_embed;
 	}
 
 	// --------------------------------------------------------------------
 	
+	/**
+	 * Clean the YouTube input to get ID if the user
+	 * has submitted a URL
+	 *
+	 * Adapted from http://snipplr.com/view.php?codeview&id=19232
+	 *
+	 * @access	public
+	 * @param	string
+	 * @return	mixed
+	 */
+	function clean_youtube_input( $input )
+	{
+		// If the thing is a YouTube ID, then just return it
+		if( strlen($input) == 11 ):
+		
+			return $input;
+		
+		endif;
+		
+		// ID starts afeter "v"
+		$starting_id = strpos($input, "?v=");
+		
+		// Alternate ID placement
+		if($starting_id === FALSE)
+			$starting_id = strpos($input, "&v=");
+			
+		// If still FALSE, URL doesn't have a vid ID
+		if($starting_id === FALSE)
+			return FALSE;
+		
+		// Offset the start location to match the beginning of the ID string
+		$starting_id +=3;
+		
+		// Get the ID string and return it
+		return substr($input, $starting_id, 11);
+	}
 }
 
 /* End of file block.youtube.php */
-/* Location: system/mojomotor/third_party/block/blocks/youtube/block.youtube.php */
+/* Location: system/mojomotor/third_party/mb/blocks/youtube/block.youtube.php */
