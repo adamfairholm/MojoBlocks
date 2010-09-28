@@ -58,7 +58,7 @@ class block_twitter_stream
 	// --------------------------------------------------------------------	
 	
 	/**
-	 * Render the Vimeo embed
+	 * Render the Twitter stream
 	 *
 	 * @access	public
 	 * @param	array

@@ -79,9 +79,7 @@ class block_html
 		return htmlspecialchars_decode($block_data['html_code']);
 	}
 
-	// --------------------------------------------------------------------
-	
 }
 
-/* End of file block.h.php */
-/* Location: system/mojomotor/third_party/block/blocks/h/block.h.php */
+/* End of file block.html.php */
+/* Location: system/mojomotor/third_party/mb/blocks/h/block.h.php */
