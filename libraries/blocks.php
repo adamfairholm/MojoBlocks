@@ -67,6 +67,9 @@ class blocks
 	{
 		$form_data = array();
 		
+		if( !$hidden )
+			$hidden = array();
+		
 		$count = 0;
 		
 		// Let's build the heading:

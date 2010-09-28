@@ -35,8 +35,8 @@
 	
 	<p class="actions">
 		
-		<a onclick="mb_form_submit('{region_id}');"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/submit_button.gif" alt="Submit" /></a>
-		<a id="cancel" onclick="mb_form_cancel('{region_id}');"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/cancel_button.gif" alt="Cancel" /></a>
+		<a id="submit_block_form" class="{region_id}"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/submit_button.gif" alt="Submit" /></a>
+		<a id="cancel_block_editor" class="{region_id}"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/cancel_button.gif" alt="Cancel" /></a>
 		
 	</p>
 

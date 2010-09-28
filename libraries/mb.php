@@ -150,7 +150,9 @@ class mb
 		// -------------------------------------				
 		// Get the data if there is any
 		// Else, return a description of the 
-		// -------------------------------------		
+		// -------------------------------------	
+		
+		$cache = FALSE;	
 		
 		if( isset($this->page_data[$tag_data['parameters']['id']]) ):
 		
@@ -196,7 +198,7 @@ class mb
 			
 		else:
 		
-			return '<p>'.$block->block_name.': '.$this->block_desc.'</p>';
+			return '<p>'.$block->block_name.': '.$block->block_desc.'</p>';
 		
 		endif;
 		
@@ -517,6 +519,7 @@ class mb
 	function _mb_dependencies()
 	{
 		$dependencies[] = '<link type="text/css" rel="stylesheet" href="'.site_url('addons/mb/css/mojoblock_style.css').'" /> ';
+		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.functions.js').'"></script>';
 		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.js').'"></script>';
 		
 		return $dependencies;
