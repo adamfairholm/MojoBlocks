@@ -12,7 +12,7 @@ class block_fb_like
 {
 	var $block_name				= "Facebook Like";
 	
-	var $block_version			= "v0.9";
+	var $block_version			= "v1.0";
 	
 	var $block_slug				= "fb_like";
 	
@@ -103,4 +103,4 @@ class block_fb_like
 }
 
 /* End of file block.fb_like.php */
-/* Location: system/mojomotor/third_party/block/blocks/fb_like/block.fb_like.php */
+/* Location: system/mojomotor/third_party/mb/blocks/fb_like/block.fb_like.php */
