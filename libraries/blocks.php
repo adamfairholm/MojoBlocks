@@ -59,10 +59,11 @@ class blocks
 	 * @access	public
 	 * @param	array
 	 * @param	string
-	 * @param	array
+	 * @param	[array]
+	 * @param	[array]
 	 * @return	string
 	 */
-	function render_editor( $block, $region_data, $validation_data = array() )
+	function render_editor( $block, $region_data, $validation_data = array(), $hidden = array() )
 	{
 		$form_data = array();
 		
@@ -79,30 +80,42 @@ class blocks
 		// Let's grab the stuff for the editor and organize it
 		
 		foreach( $block->block_fields as $slug => $data ):
+		
+			if( !array_key_exists($slug, $hidden) ):
 
-			$form_data['fields'][$count]['slug'] 	= $slug;
-			$form_data['fields'][$count]['label'] 	= $data['label'];
-			$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data, $validation_data );
-			
-			// If we have some validation data, let's show it
-			
-			if( isset($validation_data['validated']) && $validation_data['validated'] == TRUE && form_error($slug) ):
-			
-				$form_data['fields'][$count]['error']	= form_error($slug);
+				$form_data['fields'][$count]['slug'] 	= $slug;
+				$form_data['fields'][$count]['label'] 	= $data['label'];
+				$form_data['fields'][$count]['input'] 	= $this->_create_field( $slug, $data, $validation_data );
 				
-			else:
-			
-				$form_data['fields'][$count]['error']	= null;
+				// If we have some validation data, let's show it
+				
+				if( isset($validation_data['validated']) && $validation_data['validated'] == TRUE && form_error($slug) ):
+				
+					$form_data['fields'][$count]['error']	= form_error($slug);
+					
+				else:
+				
+					$form_data['fields'][$count]['error']	= null;
+					
+				endif;
+						
+				$count++;
 				
 			endif;
 					
-			$count++;		
-					
 		endforeach;
 		
-		// Let's 
+		// -------------------------------------		
+		// Hidden values
+		// -------------------------------------		
 		
-		// We need some data
+		$form_data['hidden_inputs'] 	= null;
+		
+		foreach( $hidden as $slug => $value ):
+
+			$form_data['hidden_inputs'] .= '<input type="hidden" name="'.$slug.'" id="'.$slug.'" value="'.$value.'" />' . "\n";		
+
+		endforeach; 
 		
 		// This can be replaced because we already have this data.
 		

@@ -125,6 +125,28 @@ class mb
 		
 		$block = $this->addon->blocks->load_block($tag_data['parameters']['type']);
 
+		// -------------------------------------		
+		// Update the tag settings if needed
+		// -------------------------------------
+		
+		$tag_params = $tag_data['parameters'];
+
+		unset($tag_params['type'], $tag_params['id']); // Get these babies out
+		
+		// Run a diff and see if they are the same. If there is a change, save the data
+		
+		if( count($tag_params) != 0 ):
+		
+			$diff = array_diff($tag_params, $this->page_data[$tag_data['parameters']['id']]['tag_settings']);
+			
+			if( count($diff) != 0 ):
+			
+				$this->addon->blocks_mdl->save_tag_settings( $tag_params, $this->page_data[$tag_data['parameters']['id']]['row_id'] );
+			
+			endif;
+		
+		endif;
+
 		// -------------------------------------				
 		// Get the data if there is any
 		// Else, return a description of the 
@@ -209,6 +231,9 @@ class mb
 	
 	/**
 	 * Displays block via AJAX call
+	 *
+	 * Really just meant to pull the data in. It bypasses a lot of the 
+	 * above block functions like cache. It also clears the cache.
 	 *
 	 * @access	public
 	 * @return	void
@@ -370,6 +395,35 @@ class mb
 			// -------------------------------------
 
 		endif;
+		
+		// -------------------------------------
+		// Tag Parameters Processing
+		// -------------------------------------
+		// Add tag parameters 
+		// -------------------------------------
+		
+		// Did we get the block data already on the validation run?
+		// If not, get it.
+		
+		if( !isset($single_block) ):
+		
+			$single_block = $this->addon->blocks_mdl->get_single_block(
+					$this->addon->input->post('page_url_title'),
+					$this->addon->input->post('layout_id'),
+					$this->addon->input->post('region_id')
+				);
+		
+		endif;
+			
+		if( $single_block ):
+
+			$hidden = $single_block['tag_settings'];
+
+		else:
+		
+			$hidden = array();
+		
+		endif;
 				
 		// -------------------------------------
 		// Form Validation and Processing
@@ -378,7 +432,7 @@ class mb
 		// -------------------------------------
 		
 		if ( $this->addon->form_validation->run() == FALSE ):
-			
+		
 			// Did this get kicked back? Ok, we need some info to pass	
 			
 			if( isset($form_data) ): 
@@ -394,11 +448,11 @@ class mb
 				
 				endif;
 				
-				$this->addon->blocks->render_editor( $block, $_POST, $validation_data );
+				$this->addon->blocks->render_editor( $block, $_POST, $validation_data, $hidden );
 			
 			else:
 			
-				$this->addon->blocks->render_editor( $block, $_POST );
+				$this->addon->blocks->render_editor( $block, $_POST, array(), $hidden );
 			
 			endif;
 		

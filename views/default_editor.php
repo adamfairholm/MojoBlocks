@@ -29,6 +29,8 @@
 	<input type="hidden" name="block_type" id="block_type" value="{block_type}" />
 	<input type="hidden" name="row_id" id="row_id" value="{row_id}" />
 	
+	{hidden_inputs}
+	
 	</div>
 	
 	<p class="actions">

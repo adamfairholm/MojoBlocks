@@ -17,7 +17,6 @@ class block_twitter_stream
 	var $block_slug				= "twitter_stream";
 	
 	var $block_desc				= "Show tweets from a user";
-			
 
 	var $block_fields			= array(
 		'twitter_name' 	=> array(

@@ -179,6 +179,16 @@ class Blocks_mdl extends CI_Model {
 			$return[$row['block_id']]['cache'] 				= $row['cache'];
 			$return[$row['block_id']]['cache_process'] 		= $row['cache_process'];
 			$return[$row['block_id']]['cache_expire'] 		= $row['cache_expire'];
+			
+			if( $row['tag_settings'] != '' ):
+			
+				$return[$row['block_id']]['tag_settings'] 		= unserialize($row['tag_settings']);
+				
+			else:
+			
+				$return[$row['block_id']]['tag_settings'] 		= array();
+			
+			endif;
 		
 		endforeach;
 		
@@ -209,7 +219,8 @@ class Blocks_mdl extends CI_Model {
 		
 		$block = $obj->row_array();
 		
-		$block['block_content'] = unserialize($block['block_content']);
+		$block['block_content'] 	= unserialize($block['block_content']);
+		$block['tag_settings'] 		= unserialize($block['tag_settings']);
 		
 		return $block;
 	}
@@ -234,9 +245,29 @@ class Blocks_mdl extends CI_Model {
 		
 		$block = $obj->row_array();
 		
-		$block['block_content'] = unserialize($block['block_content']);
+		$block['block_content'] 	= unserialize($block['block_content']);
+		$block['tag_settings'] 		= unserialize($block['tag_settings']);
 		
 		return $block;
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Save tag settings to the DB
+	 *
+	 * @access	public
+	 * @param	array
+	 * @param	int
+	 * @return 	bool
+	 */	
+	function save_tag_settings( $tag_settings, $block_row_id )
+	{
+		$this->db->where('id', $block_row_id);
+	
+		$update_data['tag_settings'] 	= serialize( $tag_settings );
+	
+		return $this->db->update( $this->table_name,  $update_data);
 	}
 
 }
