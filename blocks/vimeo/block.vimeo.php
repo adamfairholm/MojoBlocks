@@ -56,7 +56,7 @@ class block_vimeo
 	{
 		$video_id = $this->clean_vimeo_input( $block_data['video_id'] );
 		
-		if( ! $video_id ):
+		if( ! $video_id )
 			return "Error";
 	
 		return '<iframe src="http://player.vimeo.com/video/'.$video_id.'" width="'.$block_data['width'].'" height="'.$block_data['height'].'" frameborder="0"></iframe>';
