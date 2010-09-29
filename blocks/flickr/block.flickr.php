@@ -12,7 +12,7 @@ class block_flickr
 {
 	var $block_name				= "Flickr Images";
 	
-	var $block_version			= "v0.1";
+	var $block_version			= "v0.9";
 	
 	var $block_slug				= "flickr";
 	
@@ -23,12 +23,12 @@ class block_flickr
 				'type'			=> "dropdown",
 				'label'			=> "Display:",
 				'validation'	=> "trim|required",
-				'values'		=> array( 'user' => 'Photos from a User', 'gallery' => 'Photos from a Gallery', 'photoset' => 'Photos from a Photoset')),
+				'values'		=> array( 'user' => 'Photos from a User', 'set' => 'Photos from a Set' ) ),
 		'api_key' 	=> array(
 				'label'			=> "Flickr API Key",
 				'validation'	=> "trim|required"),
 		'item_id'	=> array(
-				'label'			=> "ID",
+				'label'			=> "User name or Set ID",
 				'validation'	=> "trim|required"),
 		'num_of_photos'	=> array(
 				'label'			=> " Number of Photos to show",
@@ -46,7 +46,7 @@ class block_flickr
 
 	var $cache_output			= TRUE;
 
-	var $cache_expire			= '+1 hour';
+	var $cache_expire			= '+2 hour';
 
 	var $cache_data				= '';
 
@@ -78,13 +78,13 @@ class block_flickr
 		// Get the data from cache or from API
 		// -------------------------------------	
 
-		$photos = $this->cache_data_call( $block_data );
+		$flickr = $this->cache_data_call( $block_data );
 		
-		if( ! $photos )
+		if( ! $flickr )
 			return "<p>Photos didn't load.</p>";
 			
-		if( $photos->photos->total == 0 )
-			return "<p>No photos returned</p>";	
+		if( isset($flickr->stat) && $flickr->stat == 'fail' )
+			return "<p>".$flickr->message."</p>";
 			
 		// -------------------------------------
 		// Go through Flickr data and put
@@ -93,32 +93,16 @@ class block_flickr
 			
 		$template_data = array();
 		
-		// Data for each photo
-		
-		$count = 0;
-		
-		foreach( $photos->photos->photo as $photo ):
-		
-			$img_url = 'http://farm'.$photo->farm.'.static.flickr.com/'.$photo->server.'/'.$photo->id.'_'.$photo->secret;
-		
-			$template_data['photos'][$count]['id'] 					= $photo->id;
-			$template_data['photos'][$count]['owner'] 				= $photo->owner;
-			$template_data['photos'][$count]['server'] 				= $photo->server;
-			$template_data['photos'][$count]['farm'] 				= $photo->farm;
-			$template_data['photos'][$count]['title'] 				= $photo->title;
-			$template_data['photos'][$count]['user_url']			= 'http://flickr.com/photos/'.$photo->owner;
-			$template_data['photos'][$count]['square_image']		= $img_url.'_s.jpg';
-			$template_data['photos'][$count]['thumbnail_image']		= $img_url.'_t.jpg';
-			$template_data['photos'][$count]['small_image']			= $img_url.'_m.jpg';
-			$template_data['photos'][$count]['medium_image']		= $img_url.'jpg';
-			$template_data['photos'][$count]['large_image']			= $img_url.'_b.jpg';
-			$template_data['photos'][$count]['original_image']		= $img_url.'_o.jpg';
-			$template_data['photos'][$count]['image_url']			= 'http://www.flickr.com/photos/'.$photo->owner.'/'.$photo->id;
-			
-			$count++;
-		
-		endforeach;
-		
+		switch( $block_data['method'] )
+		{
+			case 'user':
+				$template_data = $this->parse_user_photos( $flickr );
+				break;
+			case 'set':
+				$template_data = $this->parse_set_photos( $flickr );
+				break;
+		}
+				
 		return parse_block_template( $this->block_slug, $template_data, $block_data['layout'] );
 	}
 
@@ -149,20 +133,29 @@ class block_flickr
 
 			$item_id = $block_data['item_id'];
 			
-			// Method
+			// Method & Prep
 			
 			if( $block_data['method'] == "user" )
 			{
 				$method 	= 'flickr.people.getPublicPhotos';
 				$item		= 'user_id';
+								
+				// We need to get the NSID from the user name, to make it simpler for the user
+				
+				$user_rest_call = "http://api.flickr.com/services/rest/?method=flickr.urls.lookupUser&format=json&api_key=$api_key&url=http://www.flickr.com/people/".$block_data['item_id']."/";
+			
+				$user = $this->_make_call( $user_rest_call );
+				
+				if( isset($user->user->id) ):
+				
+					$item_id = $user->user->id;
+				
+				endif;
 			}
-			else if( $block_data['method'] == "gallery" )
+			else if( $block_data['method'] == "set" )
 			{
-				$method = '';
-			}
-			else
-			{
-				$method = 'photoset';
+				$method 	= 'flickr.photosets.getPhotos';
+				$item		= 'photoset_id';
 			}
 			
 			// Number of photos
@@ -179,19 +172,231 @@ class block_flickr
 		
 			// -------------------------------------
 			
-			$rest_call = "http://api.flickr.com/services/rest/?method=$method&format=json&api_key=$api_key&$item=$item_id&per_page=$per_page";
+			$rest_call = "http://api.flickr.com/services/rest/?method=$method&format=json&api_key=$api_key&$item=$item_id&per_page=$per_page&extras=description,owner_name,tags,original_format,geo,views,path_alias";
 		
-			$returned_call_data = file_get_contents($rest_call);
-			
-			// Yeah who guessed Flickr JSON was a lie?
-			// Thanks to http://stackoverflow.com/questions/2752439/decode-json-string-returned-from-flickr-api-using-php-curl
-			$returned_call_data = str_replace( 'jsonFlickrApi(', '', $returned_call_data );
-			$returned_call_data = substr( $returned_call_data, 0, strlen( $returned_call_data ) - 1 );
-			
-			return json_decode($returned_call_data);
+			return $this->_make_call( $rest_call );
 	
 		endif;
 	}
+
+	/**
+	 * Yeah who guessed Flickr JSON was a lie?
+	 *
+	 * Thanks to http://stackoverflow.com/questions/2752439/decode-json-string-returned-from-flickr-api-using-php-curl
+	 *
+	 * @access	private
+	 * @param	string
+	 * @return	array
+	 */
+	function _clean_flickr_json( $json )
+	{
+		$json = str_replace( 'jsonFlickrApi(', '', $json );
+		$json = substr( $json, 0, strlen( $json ) - 1 );
+		
+		return json_decode( $json );
+	}
+
+	// --------------------------------------------------------------------------	
+
+	/**
+	 * Make call
+	 *
+	 * @access	private
+	 * @param	string
+	 * @return	array
+	 */
+	function _make_call( $url_call )
+	{
+		$ch = curl_init();
+		
+		curl_setopt($ch, CURLOPT_URL, $url_call);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);    
+		$returned_call_data = curl_exec($ch);
+		curl_close($ch);
+		
+		return $this->_clean_flickr_json( $returned_call_data );
+	}
+
+	// --------------------------------------------------------------------------	
+	
+	/**
+	 * Parse an image object and return array of variables
+	 *
+	 * @access	public
+	 * @param	obj
+	 * @return	array
+	 */
+	function parse_image( $photo, $owner = FALSE )
+	{
+		$image = array();
+		
+		// Determine the Owner
+		
+		if( !$owner ):
+		
+			$owner = $photo->owner;
+		
+		endif;
+		
+		$img_url = 'http://farm'.$photo->farm.'.static.flickr.com/'.$photo->server.'/'.$photo->id.'_'.$photo->secret;
+	
+		$image['id'] 					= $photo->id;
+		$image['owner'] 				= $owner;
+		$image['server'] 				= $photo->server;
+		$image['farm'] 					= $photo->farm;
+		$image['title'] 				= $photo->title;
+		$image['user_url']				= 'http://flickr.com/photos/'.$owner;
+		$image['square_image']			= $img_url.'_s.jpg';
+		$image['thumbnail_image']		= $img_url.'_t.jpg';
+		$image['small_image']			= $img_url.'_m.jpg';
+		$image['medium_image']			= $img_url.'jpg';
+		$image['large_image']			= $img_url.'_b.jpg';
+		$image['original_image']		= $img_url.'_o.jpg';
+		$image['image_url']				= 'http://www.flickr.com/photos/'.$owner.'/'.$photo->id;
+		$image['description']			= $photo->description->_content;
+		$image['views']					= $photo->views;
+		$image['path_alias']			= $photo->pathalias;
+	
+		// Original Format
+
+		if( isset($photo->originalformat) )
+			$image['original_format']		= $photo->originalformat;
+		
+		// Owner name
+		
+		if( isset($photo->ownername) )
+			$image['owner_name']		= $photo->ownername;
+
+		// Tags
+		
+		if( isset($photo->tags) ):
+			
+			$tags = explode(" ", $photo->tags);
+			
+			$tag_count = 0;
+			
+			foreach( $tags as $tag ):
+			
+				$image['tags'][$tag_count]['tag']				= $tag;
+				$image['tags'][$tag_count]['tag_url']			= 'http://www.flickr.com/photos/tags/'.$tag;
+				$image['tags'][$tag_count]['tag_user_url']		= 'http://www.flickr.com/photos/'.$photo->pathalias.'/tags/'.$tag;
+				
+				$tag_count++;
+			
+			endforeach;				
+
+		endif;
+
+		// Geo Location
+		
+		if( isset($photo->geo_is_public) && $photo->geo_is_public == 1 ):
+		
+			$image['latitude']		= $photo->latitude;
+			$image['longitude']		= $photo->longitude;
+			$image['place_id']		= $photo->place_id;
+			$image['woeid']			= $photo->woeid;
+		
+		endif;
+		
+		// Return the Image array
+		
+		return $image;
+	}
+
+	// --------------------------------------------------------------------------	
+	
+	/**
+	 * Parse data for user's photos
+	 *
+	 * @access	public
+	 * @param	obj
+	 * @return 	array
+	 */
+	function parse_user_photos( $photos )
+	{
+		$template_data = array();
+		
+		$count = 0;
+	
+		foreach( $photos->photos->photo as $photo ):
+		
+			$template_data['photos'][$count] = $this->parse_image( $photo );
+
+			$count++;
+		
+		endforeach;
+
+		return $template_data;	
+	}
+
+	// --------------------------------------------------------------------------	
+	
+	/**
+	 * Parse set data
+	 *
+	 * @access	public
+	 * @param	obj
+	 * @return 	array
+	 */
+	function parse_set_photos( $set )
+	{
+		$template_data = array();
+
+		$count = 0;
+		
+		// Get the general data
+		
+		$template_data['set_id']		= $set->photoset->id;
+		$template_data['owner_id']		= $set->photoset->owner;
+		$template_data['owner_name']	= $set->photoset->ownername;
+		$template_data['total_image']	= $set->photoset->total;
+		
+		// Get the photos
+	
+		foreach( $set->photoset->photo as $photo ):
+		
+			$template_data['photos'][$count] = $this->parse_image( $photo, $set->photoset->owner );
+
+			$count++;
+		
+		endforeach;
+
+		return $template_data;	
+	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Encode the URL properly for FB
+	 * 
+	 * From davis dot peixoto at gmail dot com
+	 *
+	 * @access 	private
+	 * @param	string
+	 * @return	string
+	 */
+	function _url_encode( $current_url )
+	{
+    	$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+    
+    	$replacements = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]");
+    
+    	return str_replace($replacements, $entities, urlencode($current_url));
+	}
+
+	// --------------------------------------------------------------------------	
+	
+	/**
+	 * Parse gallery data. For possible future use.
+	 *
+	 * @access	public
+	 * @param	obj
+	 * @return 	array
+	 */
+	/*function parse_gallery_photos( $gallery )
+	{
+		return array();
+	}*/
 
 }
 
