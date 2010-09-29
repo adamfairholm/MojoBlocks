@@ -130,12 +130,12 @@ class mb
 		// -------------------------------------
 		
 		$tag_params = $tag_data['parameters'];
-
+		
 		unset($tag_params['type'], $tag_params['id']); // Get these babies out
 		
 		// Run a diff and see if they are the same. If there is a change, save the data
-		
-		if( count($tag_params) != 0 ):
+				
+		if( count($tag_params) != 0 && isset($this->page_data[$tag_data['parameters']['id']]['tag_settings']) ):
 		
 			$diff = array_diff($tag_params, $this->page_data[$tag_data['parameters']['id']]['tag_settings']);
 			
@@ -144,6 +144,14 @@ class mb
 				$this->addon->blocks_mdl->save_tag_settings( $tag_params, $this->page_data[$tag_data['parameters']['id']]['row_id'] );
 			
 			endif;
+		
+		endif;
+		
+		// If there is nothing in the DB, add it to flash data
+		
+		if( !isset($this->page_data[$tag_data['parameters']['id']]['tag_settings']) && count($tag_params) > 0 ):
+		
+			$this->addon->session->set_userdata( array($block->block_slug.'_'.$tag_data['parameters']['id'].'_flash_params' => $tag_params) );
 		
 		endif;
 
@@ -418,12 +426,28 @@ class mb
 		endif;
 			
 		if( $single_block ):
-
+	
 			$hidden = $single_block['tag_settings'];
 
 		else:
 		
-			$hidden = array();
+			// Looks like the blocks isn't in the DB yet.
+			// Check if it is in the flash data
+			
+			$passed_params = $this->addon->session->userdata( $block->block_slug.'_'.$this->addon->input->post('region_id').'_flash_params' );
+								
+			if( $passed_params ):
+			
+				// Send over the passed params.
+				// We will get rid of the session data later on submit
+
+				$hidden = $passed_params;
+								
+			else:
+			
+				$hidden = array();
+			
+			endif;
 		
 		endif;
 				
@@ -465,6 +489,10 @@ class mb
 			$result = $this->_form_process( $block, $form_data );
 			
 			if( $result && is_numeric($result) ):
+			
+				// If we have session data set for the block, get rid of it.
+				
+				$this->addon->session->unset_userdata( $block->block_slug.'_'.$this->addon->input->post('region_id').'_flash_params' );
 			
 				echo $result;
 			
