@@ -188,6 +188,9 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 					
 						success: function(new_data){ 
 						
+							// This is our new fallback content
+							mojoBlocks.fallback_contents[region_id] = new_data;
+						
 							$('#'+region_id).html(new_data); 
 							
 							mojoBlocks.enable_block_regions(); 
@@ -195,7 +198,6 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 							mojoBlocks.allow_editor_init = true;
 		
 						}
-					
 					})
 			}
 		 }
