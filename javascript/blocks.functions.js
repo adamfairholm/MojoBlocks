@@ -52,7 +52,7 @@ mojoBlocks.enable_block_regions = function ()
 		// Add in the editable stuff
 	
 		block_editable = jQuery("<div class='mojoblock_editable_layer'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('slow');
-		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>"+$(this).attr('name')+"</p></div>")).prepend(block_editable);
+		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>"+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
 
 	});
 };
