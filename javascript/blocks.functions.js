@@ -13,7 +13,10 @@ mojoBlocks.setup_blocks = function()
 	mojoBlocks.gather_contents();
 
 	// Enable the regions for clicking
-	mojoBlocks.enable_block_regions();
+	if( mojoEditor.is_open )
+	{
+		mojoBlocks.enable_block_regions();
+	}
 
 	// Set the regions to be clickable
 	jQuery(".mojoblock_region").click(function ()

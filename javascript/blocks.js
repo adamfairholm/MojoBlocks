@@ -4,14 +4,8 @@
 
 jQuery(document).ready(function()
 {
-	// If the editor is open, then why not go ahead
-	// and start the party
+	// Get this party started
 	
-	if( mojoEditor.is_open == true )
-	{
-		mojoBlocks.setup_blocks();
-	} 
-	
-
+	mojoBlocks.setup_blocks();
 
 });
