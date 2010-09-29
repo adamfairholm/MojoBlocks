@@ -11,5 +11,7 @@ jQuery(document).ready(function()
 	{
 		mojoBlocks.setup_blocks();
 	} 
+	
+
 
 });

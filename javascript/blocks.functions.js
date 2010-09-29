@@ -26,6 +26,21 @@ mojoBlocks.setup_blocks = function()
 		}
 	});
 
+	// View mode toggle
+	$('#mojo_bar_view_mode, #collapse_tab').live('click', function() {
+
+		if (mojoEditor.is_open)
+		{
+			mojoBlocks.enable_block_regions();
+		}
+		else
+		{
+			mojoBlocks.disable_block_regions();
+		}
+
+	});
+
+
 	// Submit button for editor
 	$('#submit_block_form').live('click', function() {
 	
@@ -39,6 +54,7 @@ mojoBlocks.setup_blocks = function()
 		mojoBlocks.cancel_editor( jQuery(this).attr('class') );
 	
 	});
+	
 }
 
 // -------------------------------------
@@ -116,8 +132,8 @@ mojoBlocks.init_editor = function (region) {
 
 mojoBlocks.disable_block_regions = function ()
 {	
-	$('.mojoblock_editable_layer').remove();
-	$('.mojo_editable_layer_header').remove();
+	$('.mojoblock_editable_layer').fadeOut(300, function() { $(this).remove(); });
+	$('.mojo_editable_layer_header').fadeOut(300, function() { $(this).remove(); });
 };
 
 // -------------------------------------
