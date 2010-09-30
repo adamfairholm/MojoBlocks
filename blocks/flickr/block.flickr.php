@@ -31,7 +31,7 @@ class block_flickr
 				'label'			=> "User name or Set ID",
 				'validation'	=> "trim|required"),
 		'num_of_photos'	=> array(
-				'label'			=> " Number of Photos to show",
+				'label'			=> "Number of Photos to show",
 				'validation'	=> "trim|numeric"),
 		'layout'		=> array(
 				'type'			=> "layout",

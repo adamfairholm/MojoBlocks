@@ -21,7 +21,7 @@ class block_fb_like
 	var $block_fields			= array(
 		'layout'	=> array(
 				'type'			=> "dropdown",
-				'label'			=> "Layout",
+				'label'			=> "Button Layout",
 				'validation'	=> "trim|required",
 				'values'		=> array( 'standard' => 'Standard', 'button_count' => 'Button Count', 'box_count' => 'Box Count')),
 		'width'			=> array(
@@ -36,7 +36,7 @@ class block_fb_like
 				'type'			=> "dropdown",
 				'label'			=> "Font",
 				'validation'	=> "trim|required",
-				'values'		=> array( 'arial' => 'Arial', 'lucida grande' => 'Lucida Grande', 'segoe ui' => 'Segoe Ui', 'tahoma' => 'Tahoma', 'trebuchet ms' => 'Trebuchet MS', 'verdana')),
+				'values'		=> array( 'arial' => 'Arial', 'lucida grande' => 'Lucida Grande', 'segoe ui' => 'Segoe Ui', 'tahoma' => 'Tahoma', 'trebuchet ms' => 'Trebuchet MS', 'verdana' => 'Verdana')),
 		'colorscheme'	=> array(
 				'type'			=> "dropdown",
 				'label'			=> "Action Word",

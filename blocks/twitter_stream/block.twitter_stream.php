@@ -137,7 +137,7 @@ class block_twitter_stream
 		// -------------------------------------	
 		
 		$template_data['tweets'] = $twitter_data;
-		
+				
 		return parse_block_template( $this->block_slug, $template_data, $block_data['layout'] );
 	}
 
