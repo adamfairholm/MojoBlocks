@@ -105,6 +105,33 @@ function parse_block_template( $block_slug, $template_data = array(), $template_
 	return $parsed_template;
 }
 
+// --------------------------------------------------------------------------
+
+/**
+ * Add a JS file to the stack
+ */
+function add_block_js_file( $block_slug, $file )
+{
+	$CI =& get_instance();
+	
+	$CI->cp->appended_output[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/block/'.$block_slug.'/'.$file).'"></script>';
+}
+
+// --------------------------------------------------------------------------
+
+/**
+ * Add a some JS
+ */
+function add_block_js( $js )
+{
+	$CI =& get_instance();
+	
+	$CI->cp->appended_output[] = '<script type="text/javascript">'.$js.'</script>';
+}
+
+
+// --------------------------------------------------------------------------
+
 function parsed_template_error()
 {
 	return 'ERROR';
