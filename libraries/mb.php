@@ -563,11 +563,23 @@ class mb
 	 */
 	function _js()
 	{
-		$file = $this->addon->uri->segment(4);
-		
 		header("Content-Type: text/javascript");
-	
-		echo file_get_contents( APPPATH . 'third_party/mb/javascript/'.$file);
+		
+		if( $this->addon->uri->segment(4) == 'block' ):
+		
+			$block = $this->addon->uri->segment(5);
+
+			$file = $this->addon->uri->segment(6);			
+
+			echo @file_get_contents( APPPATH . 'third_party/mb/blocks/'.$block.'/javascript/'.$file);
+		
+		else:
+		
+			$file = $this->addon->uri->segment(4);
+
+			echo @file_get_contents( APPPATH . 'third_party/mb/javascript/'.$file);
+		
+		endif;
 	}
 
 	// --------------------------------------------------------------------
