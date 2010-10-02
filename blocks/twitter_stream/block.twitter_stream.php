@@ -44,6 +44,9 @@ class block_twitter_stream
 
 	// --------------------------------------------------------------------
 
+	// Variables we want to save about the user for each tweet
+	var $user_tweet_info 		= array('screen_name', 'name', 'url', 'profile_image_url');
+
 	/**
 	 * Constructor
 	 *
@@ -72,8 +75,24 @@ class block_twitter_stream
 			return "<p>Tweets didn't load.</p>";
 			
 		// -------------------------------------
+		// Get Twitter data for user from 1st tweet
+		// -------------------------------------
+
+		$tweeter = array();
+
+		if( isset($tweets[0]->user) ):
+		
+			foreach( $tweets[0]->user as $user_key => $user_value ):
+			
+				$tweeter[$user_key] = $user_value;
+			
+			endforeach;
+		
+		endif;
+			
+		// -------------------------------------
 		// Go through Twitter data and put
-		// into an array
+		// tweets into an array
 		// -------------------------------------	
 			
 		$twitter_data = array();
@@ -88,11 +107,15 @@ class block_twitter_stream
 			
 					$twitter_data[$count][$key] = $value;
 				
-				}else if( $key == "user" ){
+				}else if( $key == "user" ) {
 								
 					foreach( $value as $user_key => $user_value ):
 					
-						$twitter_data[$count]['user_'.$user_key] = $user_value;
+						if( in_array($user_key, $this->user_tweet_info) ):
+					
+							$twitter_data[$count]['user_'.$user_key] = $user_value;
+					
+						endif;
 					
 					endforeach;
 				
@@ -134,9 +157,11 @@ class block_twitter_stream
 		
 		endforeach;
 		
-		// -------------------------------------	
+		// -------------------------------------
 		
-		$template_data['tweets'] = $twitter_data;
+		$temp['tweets'] = $twitter_data;
+		
+		$template_data = array_merge($tweeter, $temp);
 				
 		return parse_block_template( $this->block_slug, $template_data, $block_data['layout'] );
 	}
