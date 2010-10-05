@@ -34,10 +34,14 @@ mojoBlocks.setup_blocks = function()
 
 		if (mojoEditor.is_open)
 		{
+			mojoBlocks.allow_editor_init = true;
+		
 			mojoBlocks.enable_block_regions();
 		}
 		else
 		{
+			mojoBlocks.allow_editor_init = false;
+		
 			mojoBlocks.disable_block_regions();
 		}
 
