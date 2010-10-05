@@ -22,6 +22,7 @@ class Blocks_mdl extends CI_Model {
 	var $table_structure 			=  array(
 		'created'					=> array('type' => 'DATETIME'),
 		'updated'					=> array('type' => 'DATETIME'),
+		'block_reach'				=> array('type' => 'ENUM', 'constraint' => '60'),
 		'block_type'				=> array('type' => 'VARCHAR', 'constraint' => '50'),
 		'block_id'					=> array('type' => 'VARCHAR', 'constraint' => '100'),
 		'block_content'				=> array('type' => 'BLOB'),
@@ -138,7 +139,6 @@ class Blocks_mdl extends CI_Model {
 
 			if( !$global ):
 				
-				$block_data['page_url_title']		= '';
 				$block_data['block_reach']			= 'local';
 	
 			else:
