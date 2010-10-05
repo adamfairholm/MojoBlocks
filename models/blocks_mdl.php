@@ -72,11 +72,10 @@ class Blocks_mdl extends CI_Model {
 	 *
 	 * @access	public
 	 * @param	array
-	 * @param	int
-	 * @param	string
+	 * @param	bool
 	 * @return	bool
 	 */
-	function save_block_data( $form_data )
+	function save_block_data( $form_data, $global )
 	{
 		$block_data['updated'] 				= date('Y-m-d H:i:s');
 		
@@ -90,22 +89,39 @@ class Blocks_mdl extends CI_Model {
 		$this->load->database();
 		
 		$this->db->where('layout_id', $form_data['page_data']['layout_id']);
-		$this->db->where('page_url_title', $form_data['page_data']['page_url_title']);
 		$this->db->where('block_type', $form_data['page_data']['block_type']);
 		$this->db->where('block_id', $form_data['page_data']['region_id']);
+
+		if( !$global ):
+
+			$this->db->where('page_url_title', $form_data['page_data']['page_url_title']);
+
+		endif;
 		
 		$obj = $this->db->get($this->table_name);
 		
 		if( $obj->num_rows() == 0 ):
-		
+				
 			// We need to add to the db
 			
 			$block_data['created'] 				= date('Y-m-d H:i:s');
 			$block_data['layout_id']			= $form_data['page_data']['layout_id'];
 			$block_data['block_type']			= $form_data['page_data']['block_type'];
-			$block_data['page_url_title']		= $form_data['page_data']['page_url_title'];
 			$block_data['block_id']				= $form_data['page_data']['region_id'];
+	
+			// Is this global or local? If global, we don't need the page_url_title in there
+	
+			if( $global === FALSE ):
+				
+				$block_data['page_url_title']		= $form_data['page_data']['page_url_title'];
+				$block_data['block_reach']			= 'local';
+	
+			else:
 			
+				$block_data['block_reach']			= 'global';
+			
+			endif;
+		
 			$result = $this->db->insert($this->table_name, $block_data);
 			
 			$operation = 'insert';
@@ -117,6 +133,20 @@ class Blocks_mdl extends CI_Model {
 			$this->db->where('id', $form_data['page_data']['row_id']);
 
 			$block_data['cache']				= ''; // Wipe out the cache
+
+			// Global/Local stuff
+
+			if( !$global ):
+				
+				$block_data['page_url_title']		= '';
+				$block_data['block_reach']			= 'local';
+	
+			else:
+			
+				$block_data['page_url_title']		= ''; // If global, we don't need this anyone
+				$block_data['block_reach']			= 'global';
+			
+			endif;
 			
 			$result = $this->db->update($this->table_name, $block_data);
 			
@@ -179,6 +209,7 @@ class Blocks_mdl extends CI_Model {
 			$return[$row['block_id']]['cache'] 				= $row['cache'];
 			$return[$row['block_id']]['cache_process'] 		= $row['cache_process'];
 			$return[$row['block_id']]['cache_expire'] 		= $row['cache_expire'];
+			$return[$row['block_id']]['block_reach'] 		= $row['block_reach'];
 			
 			if( $row['tag_settings'] != '' ):
 			
@@ -206,12 +237,47 @@ class Blocks_mdl extends CI_Model {
 	 * @param	int
 	 * @return	array
 	 */
-	function get_single_block( $page_url_title, $layout_id, $region_id )
+	function get_single_block( $page_url_title, $layout_id, $region_id, $global = FALSE )
 	{
-		$this->db->where('page_url_title', $page_url_title);
 		$this->db->where('layout_id', $layout_id);
 		$this->db->where('block_id', $region_id);
+
+		if( $global == FALSE ):
+		
+			$this->db->where('page_url_title', $page_url_title);
+		
+		endif;
 	
+		$obj = $this->db->get( $this->table_name );
+		
+		if( $obj->num_rows() == 0 )
+			return FALSE;
+		
+		$block = $obj->row_array();
+		
+		$block['block_content'] 	= unserialize($block['block_content']);
+		$block['tag_settings'] 		= unserialize($block['tag_settings']);
+		
+		return $block;
+	}
+
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Get the data for a single global block by the block type and
+	 * region ID
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	string
+	 * @return	array
+	 */
+	function get_global_block_by_region_id( $region_id, $block_type )
+	{
+		$this->db->where('block_id', $region_id);
+		$this->db->where('block_type', $block_type);
+		$this->db->where('block_reach', 'global');
+		
 		$obj = $this->db->get( $this->table_name );
 		
 		if( $obj->num_rows() == 0 )

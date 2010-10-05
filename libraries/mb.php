@@ -126,6 +126,24 @@ class mb
 		$block = $this->addon->blocks->load_block($tag_data['parameters']['type']);
 
 		// -------------------------------------		
+		// Global Block Considerations
+		// -------------------------------------		
+		// We have the info for the local blocks
+		// but we need to get it if it doesn't exist
+		// Or else, you know, just don't have it
+		// -------------------------------------		
+
+		if( !isset($this->page_data[$tag_data['parameters']['id']]) ):
+		
+			// Okay we don't have the info, maybe we have it in a global block w/ the id
+			
+			$global_block_data = $this->addon->blocks_mdl->get_global_block_by_region_id( $tag_data['parameters']['id'], $tag_data['parameters']['type'] );
+			
+			$this->page_data[$tag_data['parameters']['id']] = $global_block_data;
+		
+		endif;
+
+		// -------------------------------------		
 		// Update the tag settings if needed
 		// -------------------------------------
 		
@@ -328,6 +346,22 @@ class mb
 			echo $this->show_error( 'failed_to_load_block' );
 		
 		endif;
+
+		// -------------------------------------
+		// Is this block Local or Global?
+		// -------------------------------------
+		
+		$region_class = $this->addon->input->post('region_class');
+		
+		if( $region_class == 'mojoblock_global_region' ):
+		
+			$global = TRUE;
+		
+		else:
+			
+			$global = FALSE;
+		
+		endif;
 		
 		// -------------------------------------
 		// Validation
@@ -371,7 +405,8 @@ class mb
 			$single_block = $this->addon->blocks_mdl->get_single_block(
 					$this->addon->input->post('page_url_title'),
 					$this->addon->input->post('layout_id'),
-					$this->addon->input->post('region_id')
+					$this->addon->input->post('region_id'),
+					$global
 				);
 			
 			if( $single_block ):
@@ -420,7 +455,8 @@ class mb
 			$single_block = $this->addon->blocks_mdl->get_single_block(
 					$this->addon->input->post('page_url_title'),
 					$this->addon->input->post('layout_id'),
-					$this->addon->input->post('region_id')
+					$this->addon->input->post('region_id'),
+					$global
 				);
 		
 		endif;
@@ -459,6 +495,10 @@ class mb
 		
 		if ( $this->addon->form_validation->run() == FALSE ):
 		
+			// Pass global thing readable
+			
+			$_POST['global'] = $global;
+					
 			// Did this get kicked back? Ok, we need some info to pass	
 			
 			if( isset($form_data) ): 
@@ -486,7 +526,7 @@ class mb
 		
 			// So it's good. We just need to process the form and add the data back in
 			
-			$result = $this->_form_process( $block, $form_data );
+			$result = $this->_form_process( $block, $form_data, $global );
 			
 			if( $result && is_numeric($result) ):
 			
@@ -515,7 +555,7 @@ class mb
 	 * @param	array
 	 * @return	bool
 	 */
-	function _form_process( $block, $form_data )
+	function _form_process( $block, $form_data, $global )
 	{
 		// We will use a block process function if there is one.
 			
@@ -533,7 +573,7 @@ class mb
 		
 		// Save the data
 		
-		return $this->addon->blocks_mdl->save_block_data( $form_data );
+		return $this->addon->blocks_mdl->save_block_data( $form_data, $global );
 	}
 
 	// --------------------------------------------------------------------

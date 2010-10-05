@@ -127,6 +127,16 @@ class blocks
 		$form_data['region_id']			= $region_data['region_id'];
 		$form_data['block_type']		= $region_data['block_type'];
 		
+		if( $region_data['global'] == TRUE ):
+		
+			$form_data['region_class']	= 'mojoblock_global_region';
+		
+		else:
+
+			$form_data['region_class']	= 'mojoblock_region';
+		
+		endif;
+		
 		// Do the row ID if we have it
 		
 		if( isset($region_data['row_id']) ):

@@ -1,4 +1,7 @@
-.mojoblock_editable_layer {background: #066A99; border: 3px solid #003147; position:absolute; margin: -3px -6px; padding: 0px; cursor: pointer; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; opacity: 0.4;}
+.mojoblock_editable_layer {position:absolute; margin: -3px -6px; padding: 0px; cursor: pointer; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; opacity: 0.4;}
+
+.local_mb {background: #5B9CB9; border: 3px solid #003147;}
+.global_mb {background: #A7C95E; border: 3px solid #57790E;}
 
 .mojoblock_edit {background: #F5F5F5; background-image: url(../images/bg_tile.gif); background-repeat: repeat-x; border: 1px solid #D4D4D4; -moz-border-radius: 7px; -webkit-border-radius: 7px; background-position: bottom left; overflow: hidden;}
 

@@ -19,7 +19,7 @@ mojoBlocks.setup_blocks = function()
 	}
 
 	// Set the regions to be clickable
-	jQuery(".mojoblock_region").click(function ()
+	jQuery(".mojoblock_region, .mojoblock_global_region").click(function ()
 	{
 		if (mojoBlocks.allow_editor_init == true)
 		{
@@ -69,9 +69,16 @@ mojoBlocks.enable_block_regions = function ()
 	jQuery(".mojoblock_region").each(function () {
 
 		// Add in the editable stuff
-	
-		block_editable = jQuery("<div class='mojoblock_editable_layer'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('slow');
-		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>"+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
+		block_editable = jQuery("<div class='mojoblock_editable_layer local_mb'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('slow');
+		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Local: "+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
+
+	});
+
+	jQuery(".mojoblock_global_region").each(function () {
+
+		// Add in the editable stuff
+		block_editable = jQuery("<div class='mojoblock_editable_layer global_mb'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('slow');
+		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Global: "+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
 
 	});
 };
@@ -91,7 +98,7 @@ function is_numeric(input)
 
 mojoBlocks.gather_contents = function ()
 {
-	jQuery(".mojoblock_region").each(function () {
+	jQuery(".mojoblock_region, .mojoblock_global_region").each(function () {
 
 		r_id = jQuery(this).attr('id');
 		mojoBlocks.fallback_contents[r_id] = jQuery('#'+r_id).html();
@@ -109,6 +116,7 @@ mojoBlocks.init_editor = function (region) {
 	mojoBlocks.disable_block_regions();
 	
 	// Get some data
+	region_class = jQuery(region).attr('class');
 	region_id = jQuery(region).attr('id');
 	block_type = jQuery(region).attr('name');	
 	mojoBlocks.region = region_id;
@@ -121,7 +129,7 @@ mojoBlocks.init_editor = function (region) {
 	jQuery.ajax({
 		dataType: "text",
 		type: "POST",
-		data: Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&layout_id='+layout_id+'&region_id='+region_id+'&page_url_title='+Mojo.Vars.page_url_title+'&block_type='+block_type,
+		data: Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&layout_id='+layout_id+'&region_id='+region_id+'&page_url_title='+Mojo.Vars.page_url_title+'&block_type='+block_type+'&region_class='+region_class,
 		url:  Mojo.URL.site_path+"/addons/mb/editor",
 		success: function(data){ $('#'+region_id).html(data); }
 	});

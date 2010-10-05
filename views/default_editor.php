@@ -28,6 +28,7 @@
 	<input type="hidden" name="region_id" id="region_id" value="{region_id}" />
 	<input type="hidden" name="block_type" id="block_type" value="{block_type}" />
 	<input type="hidden" name="row_id" id="row_id" value="{row_id}" />
+	<input type="hidden" name="region_class" id="region_class" value="{region_class}" />
 	
 	{hidden_inputs}
 	
