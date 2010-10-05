@@ -118,7 +118,7 @@ class mb
 	 * @return 	string
 	 */
 	function block( $tag_data = array() )
-	{
+	{	
 		// -------------------------------------		
 		// Load the block
 		// -------------------------------------		
@@ -139,7 +139,11 @@ class mb
 			
 			$global_block_data = $this->addon->blocks_mdl->get_global_block_by_region_id( $tag_data['parameters']['id'], $tag_data['parameters']['type'] );
 			
-			$this->page_data[$tag_data['parameters']['id']] = $global_block_data;
+			if( $global_block_data ):
+			
+				$this->page_data[$tag_data['parameters']['id']] = $global_block_data;
+		
+			endif;
 		
 		endif;
 
@@ -178,10 +182,10 @@ class mb
 		// Else, return a description of the 
 		// -------------------------------------	
 		
-		$cache = FALSE;	
+		$cache = FALSE;
 		
 		if( isset($this->page_data[$tag_data['parameters']['id']]) ):
-		
+				
 			$block_data = $this->page_data[$tag_data['parameters']['id']]['block_content'];
 			
 			// -------------------------------------		
