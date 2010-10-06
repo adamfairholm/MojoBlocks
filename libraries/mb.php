@@ -51,6 +51,8 @@ class mb
 		// -------------------------------------
 		
 		$this->addon->load->library('Blocks');
+
+		$this->addon->load->library('Security');
 		
 		$this->addon->load->helper('block');
 
@@ -615,13 +617,13 @@ class mb
 		
 			$block = $this->addon->uri->segment(5);
 
-			$file = $this->addon->uri->segment(6);			
+			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(6));			
 
 			echo @file_get_contents( APPPATH . 'third_party/mb/blocks/'.$block.'/javascript/'.$file);
 		
 		else:
 		
-			$file = $this->addon->uri->segment(4);
+			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
 
 			echo @file_get_contents( APPPATH . 'third_party/mb/javascript/'.$file);
 		
@@ -638,7 +640,7 @@ class mb
 	 */
 	function _css()
 	{
-		$file = $this->addon->uri->segment(4);
+		$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
 		
 		header("Content-Type: text/css");
 	
@@ -655,7 +657,7 @@ class mb
 	 */
 	function _images()
 	{
-		$file = $this->addon->uri->segment(4);
+		$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
 		
 		$this->addon->load->helper('file');
 
