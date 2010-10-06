@@ -1,7 +1,5 @@
 <div id="twitter_stream">
 
-<h2>From File System</h2>
-
 {tweets}
 
 <div class="tweet">

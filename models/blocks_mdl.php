@@ -22,12 +22,13 @@ class Blocks_mdl extends CI_Model {
 	var $table_structure 			=  array(
 		'created'					=> array('type' => 'DATETIME'),
 		'updated'					=> array('type' => 'DATETIME'),
-		'block_reach'				=> array('type' => 'ENUM', 'constraint' => '60'),
+		'block_reach'				=> array('type' => 'ENUM', 'constraint' => "'local','global'", 'default' => 'local'),
 		'block_type'				=> array('type' => 'VARCHAR', 'constraint' => '50'),
 		'block_id'					=> array('type' => 'VARCHAR', 'constraint' => '100'),
 		'block_content'				=> array('type' => 'BLOB'),
 		'page_url_title'			=> array('type' => 'VARCHAR', 'constraint' => '100'),
 		'layout_id'					=> array('type' => 'INT', 'constraint' => '5'),
+		'tag_settings'				=> array('type' => 'BLOB'),
 		'cache'						=> array('type' => 'LONGBLOB'),
 		'cache_process'				=> array('type' => 'VARCHAR', 'constraint' => '200'),
 		'cache_expire'				=> array('type' => 'VARCHAR', 'constraint' => '60')
