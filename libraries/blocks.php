@@ -235,6 +235,12 @@ class blocks
 			
 				break;
 				
+			case "file":
+			
+				$field .= form_upload( $input_config );
+				
+				break;
+				
 			case "layout":
 
 				if( isset($input_config['value']) && $input_config['value'] ):
