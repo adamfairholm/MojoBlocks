@@ -346,10 +346,10 @@ class block_flickr
 		
 		// Get the general data
 		
-		$template_data['set_id']		= $set->photoset->id;
-		$template_data['owner_id']		= $set->photoset->owner;
-		$template_data['owner_name']	= $set->photoset->ownername;
-		$template_data['total_image']	= $set->photoset->total;
+		$template_data['set_id']			= $set->photoset->id;
+		$template_data['set_owner_id']		= $set->photoset->owner;
+		$template_data['set_owner_name']	= $set->photoset->ownername;
+		$template_data['total_images']		= $set->photoset->total;
 		
 		// Get the photos
 	
