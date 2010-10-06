@@ -40,7 +40,7 @@ class block_twitter_search
 	// Cache variables
 	// --------------------------------------------------------------------
 
-	var $cache_output			= FALSE;
+	var $cache_output			= TRUE;
 
 	var $cache_expire			= '+1 hour';
 
@@ -164,8 +164,6 @@ class block_twitter_search
 		$temp['tweets'] = $twitter_data;
 		
 		$template_data = array_merge($general, $temp);
-		
-		print_r($template_data);
 				
 		return parse_block_template( $this->block_slug, $template_data, $block_data['layout'] );
 	}
@@ -193,7 +191,7 @@ class block_twitter_search
 			
 			$block_data['search_term'] = $this->_encode( $block_data['search_term'] );
 		
-			echo $url = 'http://search.twitter.com/search.json?q='.$block_data['search_term'].'&rpp='.$block_data['num_of_tweets'].'&result_type='.$block_data['result_type'];
+			$url = 'http://search.twitter.com/search.json?q='.$block_data['search_term'].'&rpp='.$block_data['num_of_tweets'].'&result_type='.$block_data['result_type'];
 		
 			return json_decode(file_get_contents($url));
 	
