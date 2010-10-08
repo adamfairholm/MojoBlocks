@@ -281,7 +281,7 @@ class blocks
 				
 				$this->CI->load->model('layout_model');
 
-				$layouts['default'] = 'Block Default';
+				$layouts['default']		= 'Block Default';
 				
 				$layout_obj = $this->CI->layout_model->get_layouts();
 				

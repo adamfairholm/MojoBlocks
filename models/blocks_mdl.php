@@ -52,6 +52,8 @@ class Blocks_mdl extends CI_Model {
 	 */
 	function check_database()
 	{
+		// First, check if the table isn't there. If it isn't, make one
+	
 		if( ! $this->db->table_exists( $this->table_name ) ):
 		
 			$this->load->dbforge();
@@ -63,6 +65,24 @@ class Blocks_mdl extends CI_Model {
 			$this->dbforge->add_key( 'id' );
 			
 			$this->dbforge->create_table( $this->table_name );
+			
+		else:
+		
+			// If we have a table, make sure that all of our fields are there
+		
+			foreach( $this->table_structure as $field_name => $field_data ):
+			
+				if( ! $this->db->field_exists($field_name, $this->table_name) ):
+				
+					$fields = array( $field_name => $field_data );
+				
+					$this->dbforge->add_column( $this->table_name, $fields );
+					
+					$fields = array();
+				
+				endif;
+			
+			endforeach;
 		
 		endif;
 	}
