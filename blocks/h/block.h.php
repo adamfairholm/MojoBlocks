@@ -53,14 +53,9 @@ class block_h
 	 */
 	function render( $block_data )
 	{
-		if( empty($block_data) )
-			return "H Tag";
-	
 		return "<".$block_data['header_type'].">".$block_data['h_content']."</".$block_data['header_type'].">";
 	}
 
-	// --------------------------------------------------------------------
-	
 }
 
 /* End of file block.h.php */
