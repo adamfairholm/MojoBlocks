@@ -48,7 +48,7 @@ function parse_block_template( $block_slug, $template_data = array(), $template_
 
 	$orig_view_path = $CI->load->_ci_view_path;
 	
-	// Check to see if 
+	// Check to see what the path should be 
 	
 	$CI->load->_ci_view_path = APPPATH.'third_party/mb/blocks/'.$block_slug.'/';
 	
