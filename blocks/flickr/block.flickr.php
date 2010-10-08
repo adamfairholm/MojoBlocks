@@ -179,6 +179,8 @@ class block_flickr
 		endif;
 	}
 
+	// --------------------------------------------------------------------------	
+
 	/**
 	 * Yeah who guessed Flickr JSON was a lie?
 	 *
@@ -384,21 +386,7 @@ class block_flickr
     	return str_replace($replacements, $entities, urlencode($current_url));
 	}
 
-	// --------------------------------------------------------------------------	
-	
-	/**
-	 * Parse gallery data. For possible future use.
-	 *
-	 * @access	public
-	 * @param	obj
-	 * @return 	array
-	 */
-	/*function parse_gallery_photos( $gallery )
-	{
-		return array();
-	}*/
-
 }
 
-/* End of file block.twitter.php */
-/* Location: system/mojomotor/third_party/block/blocks/twitter/block.twitter.php */
+/* End of file block.flickr.php */
+/* Location: system/mojomotor/third_party/mb/blocks/twitter/block.flickr.php */
