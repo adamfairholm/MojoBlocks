@@ -181,12 +181,13 @@ class mb
 
 		// -------------------------------------				
 		// Get the data if there is any
-		// Else, return a description of the 
+		// Else, return a description of the block
 		// -------------------------------------	
-		
+						
 		$cache = FALSE;
 		
 		if( isset($this->page_data[$tag_data['parameters']['id']]) ):
+
 				
 			$block_data = $this->page_data[$tag_data['parameters']['id']]['block_content'];
 			
@@ -203,11 +204,11 @@ class mb
 				$cache = validate_cache( $this->page_data[$tag_data['parameters']['id']]['cache'], $this->page_data[$tag_data['parameters']['id']]['cache_process'], $this->page_data[$tag_data['parameters']['id']]['cache_expire'] );
 				
 				if( $cache ):
-				
+
 					// See if this is page cache or a function cache
 					
 					if( method_exists($block, 'cache_data_call') ):
-					
+
 						// This has a cache data call, so before we call the render function below
 						// we need to set the cache data in the class to the cache data
 						
@@ -229,10 +230,11 @@ class mb
 			endif;
 			
 		else:
-		
+
 			return '<p>'.$block->block_name.': '.$block->block_desc.'</p>';
 		
 		endif;
+
 		
 		// -------------------------------------
 		// Block Render
@@ -248,8 +250,6 @@ class mb
 			
 			if( $cache === FALSE && ( isset($block->cache_output) && $block->cache_output == TRUE ) ):
 			
-				//print_r($this->page_data);
-			
 				write_cache( $block, $rendered_output, $this->page_data[$tag_data['parameters']['id']]['id'], $block_data );
 			
 			endif;
@@ -257,7 +257,7 @@ class mb
 			return $rendered_output;
 		
 		else:
-		
+				
 			return $this->show_error( 'no_render_function' );
 		
 		endif;
@@ -689,7 +689,7 @@ class mb
 	 * @return	string
 	 */
 	function show_error( $error, $tag = 'p' )
-	{
+	{	
 		return "<$tag>".$this->addon->lang->line('mb_error').': '.$this->addon->lang->line('mb_error_'.$error)."</$tag>";
 	}
 }

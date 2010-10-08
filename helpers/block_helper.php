@@ -48,7 +48,23 @@ function parse_block_template( $block_slug, $template_data = array(), $template_
 
 	$orig_view_path = $CI->load->_ci_view_path;
 	
+	// Check to see if 
+	
 	$CI->load->_ci_view_path = APPPATH.'third_party/mb/blocks/'.$block_slug.'/';
+	
+	if( !file_exists($CI->load->_ci_view_path) ):
+	
+		$CI->load->_ci_view_path = APPPATH.'third_party/mb/third_party/'.$block_slug.'/';
+		
+		if( !file_exists($CI->load->_ci_view_path) ):
+		
+			// Looks like we have no directory
+		
+			return FALSE;
+		
+		endif;
+	
+	endif;
 	
 	// -------------------------------------
 	// Deal with Templates

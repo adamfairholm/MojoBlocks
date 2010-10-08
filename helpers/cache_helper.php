@@ -99,7 +99,7 @@ function write_cache( $block, $render_output, $block_row_id, $block_data = array
 		
 	endif;
 	
-	// Set cache expiration
+	// Set default cache expiration
 	
 	if( !isset($block->cache_expire) || $block->cache_expire != '' ):
 	

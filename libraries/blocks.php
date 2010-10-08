@@ -34,10 +34,18 @@ class blocks
 	
 		$filepath = APPPATH.'third_party/mb/blocks/'.$block.'/';
 		
-		//If there is no file then...no
 		if( ! file_exists($filepath.'block.'.$block.EXT) ):
 			
-			return FALSE;
+			// If no file exists, then check the third_party 
+			// folder for third party blocks
+			
+			$filepath = APPPATH.'third_party/mb/third_party/'.$block.'/';
+
+			if( ! file_exists($filepath.'block.'.$block.EXT) ):
+			
+				return FALSE;
+			
+			endif;
 			
 		endif;
 		
@@ -76,7 +84,23 @@ class blocks
 		
 		$img_url = SYSDIR.'/mojomotor/third_party/mb/blocks/'.$block->block_slug.'/icon.png';
 		
-		$form_data['icon'] 				= '<img src="'.base_url().$img_url.'" alt="'.$block->block_name.'" />';
+		if( !file_exists($img_url) ):
+		
+			$img_url = SYSDIR.'/mojomotor/third_party/mb/third_party/'.$block->block_slug.'/icon.png';
+			
+			if( !file_exists($img_url) ):
+			
+				$img_url = FALSE;
+			
+			endif;
+		
+		endif;
+		
+		if( $img_url ):
+		
+			$form_data['icon'] 				= '<img src="'.base_url().$img_url.'" alt="'.$block->block_name.'" />';
+		
+		endif;
 		
 		$form_data['block_name']		= $block->block_name;
 		
