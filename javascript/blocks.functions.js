@@ -183,7 +183,7 @@ mojoBlocks.submit_blocks_form = function (region_id) {
     var data_string = '';
     
     $inputs.each(function() {
-        data_string += this.name+'='+$(this).val()+'&';
+        data_string += this.name+'='+escape($(this).val())+'&';
     });
     
     data_string += Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&form_submit=true';
