@@ -3,11 +3,16 @@
 /**
  * MojoBlocks H Block
  *
+ * Create and edit H tags
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+ 
 class block_h
 {
 	var $block_name				= "H Tag";
@@ -21,7 +26,7 @@ class block_h
 	var $block_fields			= array(
 		'h_content' 	=> array(
 				'label'			=> "Header Text",
-				'validation'	=> "trim|required"),
+				'validation'	=> "trim"),
 		'header_type'	=> array(
 				'type'			=> "dropdown",
 				'label'			=> "Header Type",
@@ -59,4 +64,4 @@ class block_h
 }
 
 /* End of file block.h.php */
-/* Location: system/mojomotor/third_party/block/blocks/h/block.h.php */
+/* Location: system/mojomotor/third_party/mb/blocks/h/block.h.php */
