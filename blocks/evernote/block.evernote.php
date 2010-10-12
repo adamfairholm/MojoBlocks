@@ -3,11 +3,16 @@
 /**
  * MojoBlocks Evernote Site Memory Block
  *
+ * Create and edit an Evernote Site Memory Button
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
- */
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
+ */ 
+ 
 class block_evernote
 {
 	var $block_name				= "Evernote Site Memory";
