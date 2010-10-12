@@ -305,7 +305,8 @@ class Blocks_mdl extends CI_Model {
 			return FALSE;
 		
 		$block = $obj->row_array();
-		
+
+		$block['row_id'] 			= $block['id'];		
 		$block['block_content'] 	= unserialize($block['block_content']);
 		$block['tag_settings'] 		= unserialize($block['tag_settings']);
 		
