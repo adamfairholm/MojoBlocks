@@ -12,6 +12,7 @@
  * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
  * @link		http://www.greeneggmedia.com/mojoblocks
  */
+ 
 class block_html
 {
 	var $block_name				= "HTML";
@@ -26,7 +27,7 @@ class block_html
 		'html_code'	=> array(
 				'type'			=> "textbox",
 				'label'			=> "HTML Code",
-				'validation'	=> "trim")
+				'validation'	=> "trim|required")
 	);
 
 	// --------------------------------------------------------------------
