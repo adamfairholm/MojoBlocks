@@ -446,6 +446,12 @@ class mb
 				
 				// -------------------------------------
 		
+			else:
+			
+				// We have a brand new block. Just get the basics.
+			
+				$form_data = $this->addon->blocks->clean_new_data( $_POST );
+		
 			endif;
 
 			// -------------------------------------

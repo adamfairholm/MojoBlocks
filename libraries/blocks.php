@@ -337,6 +337,41 @@ class blocks
 	}
 
 	// --------------------------------------------------------------------------
+
+	/**
+	 * Clean form input data for new data that isn't post or db data
+	 *
+	 * array('form_fields' => *, 'page_data' => *)
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return	array
+	 */
+	function clean_new_data( $post )
+	{
+		if( empty($post) )
+			return array();
+
+		$return = array();
+	
+		$return['form_fields'] = array();
+		
+		foreach( $this->clean_input as $input ):
+		
+			if( $input != 'row_id' ):
+		
+			$return['page_data'][$input] = $post[$input];
+			
+			endif;
+			
+		endforeach;
+		
+		$return['page_data']['row_id'] = "NA";
+		
+		return $return;
+	}
+
+	// --------------------------------------------------------------------------
 	
 	/**
 	 * Clean db input data
