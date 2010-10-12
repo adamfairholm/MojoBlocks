@@ -250,7 +250,7 @@ class mb
 			
 			if( $cache === FALSE && ( isset($block->cache_output) && $block->cache_output == TRUE ) ):
 			
-				write_cache( $block, $rendered_output, $this->page_data[$tag_data['parameters']['id']]['id'], $block_data );
+				write_cache( $block, $rendered_output, $this->page_data[$tag_data['parameters']['id']]['row_id'], $block_data );
 			
 			endif;
 			
