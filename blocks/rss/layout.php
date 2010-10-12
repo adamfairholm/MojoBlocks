@@ -1,6 +1,6 @@
 <h2>{feed_title}</h2>
 
-<p>{get_description}</p>
+<p>{description}</p>
 
 <div class="item">
 
