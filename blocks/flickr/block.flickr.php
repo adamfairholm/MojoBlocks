@@ -3,16 +3,21 @@
 /**
  * MojoBlocks Flickr Block
  *
+ * Display Flickr photos from a set or user
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+
 class block_flickr
 {
 	var $block_name				= "Flickr Images";
 	
-	var $block_version			= "v0.9";
+	var $block_version			= "v1.0";
 	
 	var $block_slug				= "flickr";
 	
@@ -389,4 +394,4 @@ class block_flickr
 }
 
 /* End of file block.flickr.php */
-/* Location: system/mojomotor/third_party/mb/blocks/twitter/block.flickr.php */
+/* Location: system/mojomotor/third_party/mb/blocks/flickr/block.flickr.php */
