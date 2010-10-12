@@ -36,7 +36,7 @@ class block_rss
 
 	// --------------------------------------------------------------------
 	
-	var $social_media = array('blinklist', 'blogmarks', 'delicious', 'digg', 'furl', 'magnolia', 'myweb20', 'newsvine', 'reddit', 'segnalo', 'simpy', 'spurl', 'wists');
+	var $social_media = array('blinklist', 'blogmarks', 'delicious', 'digg', 'furl', 'magnolia', 'newsvine', 'reddit', 'segnalo', 'simpy', 'spurl', 'wists');
 
 	// --------------------------------------------------------------------	
 
@@ -103,16 +103,14 @@ class block_rss
 		$feed->set_cache_duration(3600);
 		
 		$feed->set_feed_url( $block_data['feed_url'] );
-				
 
 		$feed->init();
-
 	
 		// General RSS feed info
 
 		$feed_data['feed_title'] 		= $feed->get_title();
 		$feed_data['copyright'] 		= $feed->get_copyright();
-		$feed_data['get_description'] 	= $feed->get_description();
+		$feed_data['description'] 		= $feed->get_description();
 		$feed_data['encoding'] 			= $feed->get_encoding();
 		$feed_data['total_items']		= $feed->get_item_quantity();
 		$feed_data['language']			= $feed->get_language();
@@ -141,8 +139,8 @@ class block_rss
 			// Preview
 			
 			$feed_data['items'][$count]['preview'] = word_limiter(
-			$feed_data['items'][$count]['content_plain'],
-			$block_data['preview_length']);
+				$feed_data['items'][$count]['content_plain'],
+				$block_data['preview_length']);
 			
 			$feed_data['items'][$count]['permalink'] 		= $item->get_permalink();
 			$feed_data['items'][$count]['date_posted'] 		= $item->get_date();
