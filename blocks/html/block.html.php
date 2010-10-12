@@ -3,10 +3,14 @@
 /**
  * MojoBlocks HTML Block
  *
+ * Display and edit a block of HTML
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
 class block_html
 {
@@ -22,7 +26,7 @@ class block_html
 		'html_code'	=> array(
 				'type'			=> "textbox",
 				'label'			=> "HTML Code",
-				'validation'	=> "required")
+				'validation'	=> "trim")
 	);
 
 	// --------------------------------------------------------------------
@@ -73,13 +77,10 @@ class block_html
 	 */
 	function render( $block_data )
 	{
-		if( empty($block_data) )
-			return "HTML Block";
-	
 		return htmlspecialchars_decode($block_data['html_code']);
 	}
 
 }
 
 /* End of file block.html.php */
-/* Location: system/mojomotor/third_party/mb/blocks/h/block.h.php */
+/* Location: system/mojomotor/third_party/mb/blocks/html/block.html.php */
