@@ -186,9 +186,11 @@ class mb
 						
 		$cache = FALSE;
 		
-		if( isset($this->page_data[$tag_data['parameters']['id']]) ):
+		if( 
+			isset($this->page_data[$tag_data['parameters']['id']]) && 
+			( $this->page_data[$tag_data['parameters']['id']]['block_type'] == $tag_data['parameters']['type'] )
+		):
 
-				
 			$block_data = $this->page_data[$tag_data['parameters']['id']]['block_content'];
 			
 			// -------------------------------------		
@@ -413,10 +415,11 @@ class mb
 			$single_block = $this->addon->blocks_mdl->get_single_block(
 					$this->addon->input->post('page_url_title'),
 					$this->addon->input->post('layout_id'),
+					$this->addon->input->post('block_type'),
 					$this->addon->input->post('region_id'),
 					$global
 				);
-			
+				
 			if( $single_block ):
 			
 				$form_data = $this->addon->blocks->clean_db_input_data( $single_block );
@@ -463,6 +466,7 @@ class mb
 			$single_block = $this->addon->blocks_mdl->get_single_block(
 					$this->addon->input->post('page_url_title'),
 					$this->addon->input->post('layout_id'),
+					$this->addon->input->post('block_type'),
 					$this->addon->input->post('region_id'),
 					$global
 				);

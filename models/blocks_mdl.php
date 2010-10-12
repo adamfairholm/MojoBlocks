@@ -258,10 +258,11 @@ class Blocks_mdl extends CI_Model {
 	 * @param	int
 	 * @return	array
 	 */
-	function get_single_block( $page_url_title, $layout_id, $region_id, $global = FALSE )
+	function get_single_block( $page_url_title, $layout_id, $block_type, $region_id, $global = FALSE )
 	{
 		$this->db->where('layout_id', $layout_id);
 		$this->db->where('block_id', $region_id);
+		$this->db->where('block_type', $block_type);
 
 		if( $global == FALSE ):
 		
