@@ -3,11 +3,16 @@
 /**
  * MojoBlocks Facebook Like Block
  *
+ * Create and edit a Facebook Like Button
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+
 class block_fb_like
 {
 	var $block_name				= "Facebook Like";
