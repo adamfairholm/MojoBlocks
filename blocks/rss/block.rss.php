@@ -3,11 +3,16 @@
 /**
  * MojoBlocks RSS Block
  *
+ * Display data from an RSS feed
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+
 class block_rss
 {
 	var $block_name				= "RSS";
