@@ -6,9 +6,11 @@
  * Helpful functions for blocks 
  *
  * @package		MojoBlocks
- * @subpackage	Blocks
+ * @subpackage	Helpers
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
 
 // --------------------------------------------------------------------------

@@ -1,15 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * MojoBlocks Addon Library
+ * MojoBlocks Block Library
  *
- * Handles various MojoBlocks functions.
+ * Handles various MojoBlocks functions 
  *
  * @package		MojoBlocks
- * @subpackage	Addons
+ * @subpackage	Libraries
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
- */
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
+ */ 
+ 
 class blocks
 {
 	var $clean_input						= array('layout_id', 'page_url_title', 'region_id', 'block_type', 'row_id');

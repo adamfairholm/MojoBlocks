@@ -1,13 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * MojoBlocks Addon Controller
+ * MojoBlocks Model
  *
  * @package		MojoBlocks
- * @subpackage	Addons
+ * @subpackage	Models
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
- */
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
+ */ 
 
 class Blocks_mdl extends CI_Model {
 	
@@ -15,6 +17,8 @@ class Blocks_mdl extends CI_Model {
 	 * Name for our blocks table
 	 */
 	var $table_name					= 'blocks';
+
+   // --------------------------------------------------------------------------
 	
 	/**
 	 * Table makeup

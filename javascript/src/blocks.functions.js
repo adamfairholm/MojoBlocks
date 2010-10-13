@@ -1,3 +1,16 @@
+// -------------------------------------
+// 
+// MojoBlocks Block Functions
+//
+// * @package		MojoBlocks
+// * @subpackage	Javascript
+// * @copyright		Copyright (c) 2010, Green Egg Media
+// * @author		Green Egg Media
+// * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+// * @link			http://www.greeneggmedia.com/mojoblocks
+//
+// -------------------------------------
+
 mojoBlocks = {
 	allow_editor_init: true,
 	fallback_contents: []

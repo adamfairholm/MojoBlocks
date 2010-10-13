@@ -1,13 +1,16 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
+ 
 /**
  * MojoBlocks Addon Controller
  *
  * @package		MojoBlocks
- * @subpackage	Addons
+ * @subpackage	Helpers
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
- */
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
+ */ 
+ 
 class mb
 {
 	var $addon;
@@ -611,8 +614,8 @@ class mb
 	function _mb_dependencies()
 	{
 		$dependencies[] = '<link type="text/css" rel="stylesheet" href="'.site_url('addons/mb/css/mojoblock_style.css').'" /> ';
-		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.functions.js').'"></script>';
-		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.js').'"></script>';
+		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.functions.min.js').'"></script>';
+		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.min.js').'"></script>';
 		
 		return $dependencies;
 	}
