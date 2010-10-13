@@ -3,16 +3,21 @@
 /**
  * MojoBlocks Twitter Button Block
  *
+ * Create and config a Twitter bookmark button
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+
 class block_twitter_button
 {
 	var $block_name				= "Twitter Button";
 	
-	var $block_version			= "v0.1";
+	var $block_version			= "v1.0";
 	
 	var $block_slug				= "twitter_button";
 	
