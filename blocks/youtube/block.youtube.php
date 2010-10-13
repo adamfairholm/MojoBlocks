@@ -1,13 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * MojoBlocks YouTube Block
+ * MojoBlocks YouTube Embed Block
+ *
+ * Display a YouTube video embed
  *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+ 
 class block_youtube
 {
 	var $block_name				= "YouTube Embed";
