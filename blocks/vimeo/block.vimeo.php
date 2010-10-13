@@ -1,13 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * MojoBlocks Vimeo Block
+ * MojoBlocks Vimeo Embed Block
+ *
+ * Display a Vimeo video embed
  *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+
 class block_vimeo
 {
 	var $block_name				= "Vimeo";
@@ -98,4 +103,4 @@ class block_vimeo
 }
 
 /* End of file block.vimeo.php */
-/* Location: system/mojomotor/third_party/block/blocks/vimeo/block.vimeo.php */
+/* Location: system/mojomotor/third_party/mb/blocks/vimeo/block.vimeo.php */
