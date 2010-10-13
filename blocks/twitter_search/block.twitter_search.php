@@ -3,11 +3,16 @@
 /**
  * MojoBlocks Twitter Search Block
  *
+ * Display results of a Twitter search
+ *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
+ 
 class block_twitter_search
 {
 	var $block_name				= "Twitter Search";
@@ -40,7 +45,7 @@ class block_twitter_search
 	// Cache variables
 	// --------------------------------------------------------------------
 
-	var $cache_output			= TRUE;
+	var $cache_output			= FALSE;
 
 	var $cache_expire			= '+1 hour';
 
@@ -76,7 +81,7 @@ class block_twitter_search
 		$tweets = $this->cache_data_call( $block_data );
 				
 		if( ! $tweets )
-			return "<p>Tweets didn't load.</p>";
+			return "<p>There was an error in loading the tweets.</p>";
 			
 		// -------------------------------------
 		// Get general data
@@ -164,6 +169,12 @@ class block_twitter_search
 		$temp['tweets'] = $twitter_data;
 		
 		$template_data = array_merge($general, $temp);
+		
+		if( count($twitter_data) == 0 ):
+			
+			return "<p>No tweets were found.</p>";
+		
+		endif;
 				
 		return parse_block_template( $this->block_slug, $template_data, $block_data['layout'] );
 	}
@@ -187,7 +198,7 @@ class block_twitter_search
 		
 		else:
 		
-			// Clean the hashtag
+			// Clean the hashtag / other content
 			
 			$block_data['search_term'] = $this->_encode( $block_data['search_term'] );
 		
@@ -286,9 +297,9 @@ class block_twitter_search
 	 */
 	function _encode( $string )
 	{
-    	$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+    	$entities = array('%25', '%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%23', '%5B', '%5D');
     
-    	$replacements = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]");
+    	$replacements = array("%", '!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "#", "[", "]");
     
     	return str_replace($replacements, $entities, $string);
 	}
