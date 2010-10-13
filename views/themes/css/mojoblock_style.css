@@ -21,3 +21,5 @@ table.mojoblocks_table td {padding: 4px;}
 .block_header {height: 43px; width: 100%; background-image: url(../images/header_bg.gif); background-repeat: repeat; -webkit-border-top-left-radius: 6px; -moz-border-top-left-radius: 6px; border-top-left-radius: 6px; -webkit-border-top-right-radius: 6px; -moz-border-top-right-radius: 6px; border-top-right-radius: 6px; padding-top: 7px; overflow: hidden;}
 .block_header img {float: left; padding-left: 10px; margin-right: 4px;}
 .block_header p.block_title {color: #fff !important; float: left; font-size: 14px !important; display: inline; font-weight: bold; margin-top: 7px;}
+
+form.mojoblocks_form p.error {font-style: italic;}

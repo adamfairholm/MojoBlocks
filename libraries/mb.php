@@ -12,7 +12,7 @@ class mb
 {
 	var $addon;
 	
-	var $addon_version 						= '0.1 Beta';
+	var $addon_version 						= '0.9 Beta';
 	
 	var $dependencies_loaded 				= FALSE;
 	
@@ -126,6 +126,12 @@ class mb
 		// -------------------------------------		
 		
 		$block = $this->addon->blocks->load_block($tag_data['parameters']['type']);
+		
+		if( ! $block ):
+		
+			return $this->show_error( $this->addon->lang->line('failed_to_load_block_file') );
+		
+		endif;
 
 		// -------------------------------------		
 		// Global Block Considerations
@@ -232,7 +238,7 @@ class mb
 			endif;
 			
 		else:
-
+		
 			return '<p>'.$block->block_name.': '.$block->block_desc.'</p>';
 		
 		endif;
