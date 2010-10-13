@@ -1,20 +1,25 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * MojoBlocks Twitter Block
+ * MojoBlocks Twitter User Block
+ *
+ * Display tweets from a user
  *
  * @package		MojoBlocks
  * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
  * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
  */
-class block_twitter_stream
+
+class block_twitter_user
 {
-	var $block_name				= "Twitter Stream";
+	var $block_name				= "Twitter User";
 	
 	var $block_version			= "v1.0";
 	
-	var $block_slug				= "twitter_stream";
+	var $block_slug				= "twitter_user";
 	
 	var $block_desc				= "Show tweets from a user";
 
@@ -266,5 +271,5 @@ class block_twitter_stream
 	}
 }
 
-/* End of file block.twitter.php */
-/* Location: system/mojomotor/third_party/block/blocks/twitter/block.twitter.php */
+/* End of file block.twitter_user.php */
+/* Location: system/mojomotor/third_party/mb/blocks/twitter_user/block.twitter_user.php */
