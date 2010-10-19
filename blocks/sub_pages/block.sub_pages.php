@@ -1,0 +1,228 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * MojoBlocks Sub Pages Block
+ *
+ * Display displays sub pages from a given page
+ *
+ * @package		MojoBlocks
+ * @subpackage	Blocks
+ * @copyright	Copyright (c) 2010, Green Egg Media
+ * @author		Green Egg Media
+ * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
+ * @link		http://www.greeneggmedia.com/mojoblocks
+ */
+ 
+class block_sub_pages
+{
+	var $block_name				= "Sub Pages";
+	
+	var $block_version			= "v1.0";
+	
+	var $block_slug				= "sub_pages";
+	
+	var $block_desc				= "Display sub pages";
+
+	var $block_fields			= array(
+		'start_from'		=> array(
+				'type'			=> "dropdown",
+				'label'			=> "Start From",
+				'validation'	=> "required",
+				'values'		=> array() ),
+		'depth'		=> array(
+				'type'			=> "dropdown",
+				'label'			=> "Depth",
+				'validation'	=> "numeric|required",
+				'values'		=> array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5') ),
+		'id'		=> array(
+				'label'			=> "Top Level ID",
+				'validation'	=> "trim")
+	);
+
+	// --------------------------------------------------------------------
+
+	var $pages					= array();
+	
+	var $count					= 1;
+	
+	// --------------------------------------------------------------------
+
+	/**
+	 * Constructor
+	 *
+	 * @access	public
+	 * @return	void
+	 */
+	function __construct()
+	{	
+		$this->block =& get_instance();
+
+		$this->block->load->helper( array('url', 'page', 'array') );
+
+		$this->block->load->model('site_model');
+
+		$this->block->load->model('page_model');
+		
+		$this->page_list = $this->block->page_model->get_all_pages_info( TRUE );
+		
+		$this->site_structure = $this->block->site_model->get_setting('site_structure');
+		
+		// Populate "Start From"
+		
+		$pages_list = array();
+		
+		foreach( $this->page_list as $key => $value ):
+		
+			$pages_list[$key] = $value['page_title'];
+		
+		endforeach;
+		
+		$this->block_fields['start_from']['values'] = $pages_list;
+		
+		// Get the current URL
+		
+		$this->current_segment = $this->block->uri->segment(2);
+	}
+
+	// --------------------------------------------------------------------	
+	
+	/**
+	 * Render the Block
+	 *
+	 * @access	public
+	 * @param	array
+	 * @return 	string
+	 */
+	function render( $block_data )
+	{
+		$page_id = $block_data['start_from'];
+		
+		// Find & set the depth
+		
+		if( !isset($block_data['depth']) || !is_numeric($block_data['depth']) ):
+		
+			$this->depth = FALSE;
+		
+		else:
+			
+			$this->depth = $block_data['depth'];
+			
+		endif;
+
+		$site_structure = array_find_element_by_key($page_id, $this->site_structure);
+		
+		if( empty($site_structure) ):
+		
+			return null;
+		
+		endif;
+		
+		// Build UL
+		
+		if( $block_data['id'] ):
+		
+			$out = "\n" . '<ul id="' . $block_data['id'] . '">' . "\n";
+
+		else:
+		
+			$out = "\n" . '<ul>' . "\n";
+		
+		endif;
+		
+		foreach( $site_structure as $key => $value ):
+		
+			$out .= $this->create_ul_element( $key, $value );
+		
+		endforeach;
+		
+		return $out;
+	}
+
+	function create_ul_element( $key, $var )
+	{
+		$out = '';
+
+		if( $this->count <= $this->depth ):
+		
+		// Increment before things get crazy
+		
+		$this->count++;
+	
+		if( !is_array($var) || (isset($var[0]) && $var[0] == '') ):
+		
+			if( (isset($var[0]) && $var[0] == '') ):
+			
+				$node = $key;
+			
+			else:
+			
+				$node = $var;
+			
+			endif;
+			
+			// -------------------------------------			
+			// Should this be a current?
+			// -------------------------------------
+			
+			if( $this->page_list[$node]['url_title'] == $this->current_segment ):
+			
+				$class = ' class="current"';
+			
+			else:
+			
+				$class = null;
+			
+			endif;
+		
+			// -------------------------------------
+			
+		
+			$out .= '<li><a href="'.site_url('page/'.$this->page_list[$node]['url_title']).'"'.$class.'>'.$this->page_list[$node]['page_title'].'</a></li>' . "\n";
+		
+		else:
+		
+		// It is an array
+			
+			// Make a new UL
+
+			// -------------------------------------			
+			// Should this be a current?
+			// -------------------------------------
+			
+			if( $this->page_list[$key]['url_title'] == $this->current_segment ):
+			
+				$class = ' class="current"';
+			
+			else:
+			
+				$class = null;
+			
+			endif;
+		
+			// -------------------------------------
+		
+			$out .= '<li><a href="'.site_url('page/'.$this->page_list[$key]['url_title']).'"'.$class.'>'.$this->page_list[$key]['page_title'].'</a>' . "\n";
+			
+			// Make a new UL inside the LI
+
+			$out .= '<ul>' . "\n";
+		
+			foreach( $var as $key => $var ):
+			
+				$out .= $this->create_ul_element( $key, $var );
+			
+			endforeach;
+			
+			$out .= '</li>' . "\n" . '</ul>' . "\n";
+		
+		endif;
+			
+		return $out;
+		
+		endif;
+	}
+
+}
+
+/* End of file block.html.php */
+/* Location: system/mojomotor/third_party/mb/blocks/html/block.html.php */
