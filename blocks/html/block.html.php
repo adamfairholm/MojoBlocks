@@ -27,7 +27,7 @@ class block_html
 		'html_code'	=> array(
 				'type'			=> "textbox",
 				'label'			=> "HTML Code",
-				'validation'	=> "trim|required")
+				'validation'	=> "trim")
 	);
 
 	// --------------------------------------------------------------------
