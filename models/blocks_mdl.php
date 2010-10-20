@@ -105,6 +105,16 @@ class Blocks_mdl extends CI_Model {
 			$this->db->where('page_url_title', $form_data['page_data']['page_url_title']);
 
 		endif;
+
+		if( $global ):
+		
+			$this->db->where('block_reach', "global");
+		
+		else:
+
+			$this->db->where('block_reach', "local");
+		
+		endif;
 		
 		$obj = $this->db->get($this->table_name);
 		
@@ -256,12 +266,24 @@ class Blocks_mdl extends CI_Model {
 		
 		endif;
 	
+		if( $global ):
+		
+			$this->db->where('block_reach', 'global');
+		
+		else:
+
+			$this->db->where('block_reach', 'local');		
+		
+		endif;
+	
 		$obj = $this->db->get( $this->table_name );
 		
 		if( $obj->num_rows() == 0 )
 			return FALSE;
 		
 		$block = $obj->row_array();
+		
+		//echo $this->db->last_query();
 		
 		$block['block_content'] 	= unserialize($block['block_content']);
 		$block['tag_settings'] 		= unserialize($block['tag_settings']);
@@ -282,6 +304,7 @@ class Blocks_mdl extends CI_Model {
 	 */
 	function get_global_block_by_region_id( $region_id, $block_type )
 	{
+		$this->db->limit(1);
 		$this->db->where('block_id', $region_id);
 		$this->db->where('block_type', $block_type);
 		$this->db->where('block_reach', 'global');

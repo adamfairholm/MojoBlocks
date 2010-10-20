@@ -214,7 +214,7 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 			
 			if( return_data == 'BLOCKS_FORM_INPUT_FAILURE' )
 			{
-				alert('an_error');
+				alert('An error has occurred. Please try again.');
 			}
 			else if( is_numeric(return_data) == false )
 			{

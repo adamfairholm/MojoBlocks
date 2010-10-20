@@ -137,16 +137,28 @@ class mb
 		endif;
 
 		// -------------------------------------		
+		// Global or Local?
+		// -------------------------------------	
+					
+		if( isset($tag_data['parameters']['reach']) && $tag_data['parameters']['reach'] == "global" ):
+		
+			$glob_or_local = "global";
+
+		else:
+		
+			$glob_or_local = "local";
+		
+		endif;
+
+		// -------------------------------------		
 		// Global Block Considerations
 		// -------------------------------------		
 		// We have the info for the local blocks
 		// but we need to get it if it doesn't exist
 		// Or else, you know, just don't have it
-		// -------------------------------------		
-
-		if( !isset($this->page_data[$tag_data['parameters']['id']]) ):
-		
-			// Okay we don't have the info, maybe we have it in a global block w/ the id
+		// -------------------------------------
+				
+		if( $glob_or_local == "global"):
 			
 			$global_block_data = $this->addon->blocks_mdl->get_global_block_by_region_id( $tag_data['parameters']['id'], $tag_data['parameters']['type'] );
 			
@@ -157,7 +169,7 @@ class mb
 			endif;
 		
 		endif;
-
+		
 		// -------------------------------------		
 		// Update the tag settings if needed
 		// -------------------------------------
@@ -204,12 +216,13 @@ class mb
 		// -------------------------------------	
 						
 		$cache = FALSE;
-		
+				
 		if( 
 			isset($this->page_data[$tag_data['parameters']['id']]) && 
-			( $this->page_data[$tag_data['parameters']['id']]['block_type'] == $tag_data['parameters']['type'] )
+			( $this->page_data[$tag_data['parameters']['id']]['block_type'] == $tag_data['parameters']['type'] ) && 
+			( $this->page_data[$tag_data['parameters']['id']]['block_reach'] == $glob_or_local )
 		):
-
+				
 			$block_data = $this->page_data[$tag_data['parameters']['id']]['block_content'];
 			
 			// -------------------------------------		
