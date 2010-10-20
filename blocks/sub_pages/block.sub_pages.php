@@ -3,7 +3,7 @@
 /**
  * MojoBlocks Sub Pages Block
  *
- * Display displays sub pages from a given page
+ * Display sub pages from a given page
  *
  * @package		MojoBlocks
  * @subpackage	Blocks
