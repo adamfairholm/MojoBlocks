@@ -170,6 +170,16 @@ class mb
 				
 		if( count($tag_params) != 0 && isset($this->page_data[$tag_data['parameters']['id']]['tag_settings']) ):
 		
+			// If there are no parameters, array_diff we expect an array, so make sure it gets it
+			
+			if( $this->page_data[$tag_data['parameters']['id']]['tag_settings'] == '' ):
+			
+				$this->page_data[$tag_data['parameters']['id']]['tag_settings'] = array();
+			
+			endif;
+			
+			// Run the diff
+		
 			$diff = array_diff($tag_params, $this->page_data[$tag_data['parameters']['id']]['tag_settings']);
 			
 			if( count($diff) != 0 ):
@@ -393,7 +403,7 @@ class mb
 		// -------------------------------------
 		// Set validation and create form fields
 		// -------------------------------------
-
+		
 		foreach( $block->block_fields as $slug => $data ):
 		
 			$this->addon->form_validation->set_rules($slug, $data['label'], $data['validation']);
