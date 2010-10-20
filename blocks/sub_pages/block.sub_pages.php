@@ -95,13 +95,34 @@ class block_sub_pages
 	 */
 	function render( $block_data )
 	{
+		// Get the page ID
+		
 		$page_id = $block_data['start_from'];
+		
+		if( !is_numeric($page_id) ):
+		
+			// If the page ID is not numeric, a url_title must've been passed.
+			// We need to get the ID from that.
+			
+			$page_data = $this->block->page_model->get_page_by_url_title( strtolower($page_id) );
+			
+			if( isset( $page_data->id ) ):
+			
+				$page_id = $page_data->id;
+			
+			else:
+			
+				return null;
+		
+			endif;
+		
+		endif;
 		
 		// Find & set the depth
 		
 		if( !isset($block_data['depth']) || !is_numeric($block_data['depth']) ):
 		
-			$this->depth = FALSE;
+			$this->depth = 1;
 		
 		else:
 			
