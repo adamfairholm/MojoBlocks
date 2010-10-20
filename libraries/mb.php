@@ -530,7 +530,24 @@ class mb
 		// Return the render function or process the form
 		// -------------------------------------
 		
-		if ( $this->addon->form_validation->run() == FALSE ):
+		// Little workaround for form_validation relying on empty $_POST
+		// var. Without this bad things happen.
+		
+		$post_count = count($_POST);
+		
+		if( $post_count == 5 ):
+		
+			$post_count = FALSE;
+		
+		else:
+		
+			$post_count = TRUE;
+		
+		endif;
+	
+		// -------------------------------------
+		
+		if ( $this->addon->form_validation->run() == FALSE || !$post_count ):
 		
 			// Pass global thing readable
 			
