@@ -265,7 +265,17 @@ class mb
 			
 		else:
 		
-			return '<p>'.$block->block_name.': '.$block->block_desc.'</p>';
+			// We only want to show the default text if a user is signed in
+
+			if( $this->addon->session->userdata('group_id') ):
+		
+				return '<p>'.$block->block_name.': '.$block->block_desc.'</p>';
+			
+			else:
+			
+				return null;
+			
+			endif;
 		
 		endif;
 
