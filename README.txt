@@ -1,4 +1,4 @@
-MojoBlocks v0.9 Beta
+MojoBlocks v1.0
 =====================
 by Green Egg Media
 www.greeneggmedia.com

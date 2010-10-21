@@ -15,7 +15,7 @@ class mb
 {
 	var $addon;
 	
-	var $addon_version 						= '0.9 Beta';
+	var $addon_version 						= '1.0';
 	
 	var $dependencies_loaded 				= FALSE;
 	
@@ -764,4 +764,4 @@ class mb
 }
 
 /* End of file mb.php */
-/* Location: /third_party/block/libraries/mb.php */
+/* Location: /system/mojomotor/third_party/block/libraries/mb.php */
