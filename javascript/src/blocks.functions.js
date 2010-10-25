@@ -31,17 +31,6 @@ mojoBlocks.setup_blocks = function()
 		mojoBlocks.enable_block_regions();
 	}
 
-	// Set the regions to be clickable
-	jQuery(".mojoblock_region, .mojoblock_global_region").click(function ()
-	{
-		if (mojoBlocks.allow_editor_init == true)
-		{
-			mojoBlocks.allow_editor_init = false;
-		
-			mojoBlocks.init_editor(this);
-		}
-	});
-
 	// View mode toggle
 	$('#mojo_bar_view_mode, #collapse_tab').live('click', function() {
 
@@ -98,6 +87,21 @@ mojoBlocks.enable_block_regions = function ()
 		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Global: "+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
 
 	});
+
+	// Set the regions to be clickable
+	if( mojoEditor.is_open )
+	{
+		jQuery(".mojoblock_region, .mojoblock_global_region").click(function ()
+		{
+			if (mojoBlocks.allow_editor_init == true)
+			{
+				mojoBlocks.allow_editor_init = false;
+			
+				mojoBlocks.init_editor(this);
+			}
+		});
+	}
+
 };
 
 // -------------------------------------
