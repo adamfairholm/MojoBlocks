@@ -15,7 +15,7 @@ class mb
 {
 	var $addon;
 	
-	var $addon_version 						= '1.0.1';
+	var $addon_version 						= '1.1';
 	
 	var $dependencies_loaded 				= FALSE;
 	
