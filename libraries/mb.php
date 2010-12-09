@@ -278,7 +278,6 @@ class mb
 			endif;
 		
 		endif;
-
 		
 		// -------------------------------------
 		// Block Render

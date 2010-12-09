@@ -96,7 +96,12 @@ class Blocks_mdl extends CI_Model {
 		
 		$this->load->database();
 		
-		$this->db->where('layout_id', $form_data['page_data']['layout_id']);
+		if( ! $global ):
+
+			$this->db->where('layout_id', $form_data['page_data']['layout_id']);
+		
+		endif;
+		
 		$this->db->where('block_type', $form_data['page_data']['block_type']);
 		$this->db->where('block_id', $form_data['page_data']['region_id']);
 
@@ -256,13 +261,13 @@ class Blocks_mdl extends CI_Model {
 	 */
 	function get_single_block( $page_url_title, $layout_id, $block_type, $region_id, $global = FALSE )
 	{
-		$this->db->where('layout_id', $layout_id);
 		$this->db->where('block_id', $region_id);
 		$this->db->where('block_type', $block_type);
 
 		if( $global == FALSE ):
 		
 			$this->db->where('page_url_title', $page_url_title);
+			$this->db->where('layout_id', $layout_id);
 		
 		endif;
 	
