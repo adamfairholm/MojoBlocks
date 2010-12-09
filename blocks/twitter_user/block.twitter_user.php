@@ -76,8 +76,11 @@ class block_twitter_user
 	{	
 		$tweets = $this->cache_data_call( $block_data );
 		
-		if( ! $tweets )
-			return "<p>Tweets didn't load.</p>";
+		if( $tweets === FALSE || empty($tweets) ):
+		
+			return "<p>Unable to load tweets</p>";
+			
+		endif;
 			
 		// -------------------------------------
 		// Get Twitter data for user from 1st tweet
@@ -184,8 +187,8 @@ class block_twitter_user
 	 */
 	function cache_data_call( $block_data )
 	{
-		if( $this->cache_data ):
-			
+		if( $this->cache_data && is_array($this->cache_data) ):
+
 			return $this->cache_data;
 		
 		else:
@@ -198,7 +201,7 @@ class block_twitter_user
 	// --------------------------------------------------------------------
 	
 	/**
-	 * Make tweet have linkts to people, links, and hashtags
+	 * Make tweet have links to people, links, and hashtags
 	 *
 	 * From: http://www.snipe.net/2009/09/php-twitter-clickable-links/
 	 *
