@@ -65,9 +65,7 @@ class Blocks_mdl extends CI_Model {
 			$this->dbforge->add_field( 'id' );			
 			
 			$this->dbforge->add_field( $this->table_structure );
-			
-			$this->dbforge->add_key( 'id' );
-			
+						
 			$this->dbforge->create_table( $this->table_name );
 			
 		endif;
