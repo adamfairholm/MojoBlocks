@@ -32,6 +32,8 @@ class mb
 	function __construct()
 	{
 		$this->addon =& get_instance();
+
+		$this->addon->load->config('Mojoblocks');
 		
 		// -------------------------------------
 		// Dip out for CSS/JS
@@ -64,6 +66,7 @@ class mb
 		$this->addon->lang->load('mb', '', FALSE, TRUE, APPPATH.'third_party/mb/');
 		
 		$this->addon->load->model('blocks_mdl');
+		
 		
 		// -------------------------------------
 		// Load JS and CSS assets
@@ -662,7 +665,7 @@ class mb
 	 */
 	function _mb_dependencies()
 	{
-		$dependencies[] = '<link type="text/css" rel="stylesheet" href="'.site_url('addons/mb/css/mojoblock_style.css').'" /> ';
+		$dependencies[] = '<link type="text/css" rel="stylesheet" href="'.site_url('addons/mb/css/mojoblocks.css').'" /> ';
 		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.functions.min.js').'"></script>';
 		$dependencies[] = '<script charset="utf-8" type="text/javascript" src="'.site_url('addons/mb/js/blocks.min.js').'"></script>';
 		
@@ -684,13 +687,37 @@ class mb
 		if( $this->addon->uri->segment(4) == 'block' ):
 		
 			$block = $this->addon->uri->segment(5);
+			
+			// GoDaddy mode check
+			
+			if( $this->addon->config->item('godaddy_mode') ):
+			
+				$filename = str_replace('_', '.', $this->addon->uri->segment(6));
+			
+			else:
+			
+				$filename = $this->addon->uri->segment(6);
+			
+			endif;
 
-			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(6));			
+			$file = $this->addon->security->sanitize_filename( $filename );			
 
-			echo @file_get_contents( APPPATH . 'third_party/mb/blocks/'.$block.'/javascript/'.$file);
+			echo @file_get_contents( APPPATH . 'third_party/mb/blocks/'.$block.'/javascript/'.$file );
 		
 		else:
 		
+			// GoDaddy mode check
+
+			if( $this->addon->config->item('godaddy_mode') ):
+			
+				$filename = str_replace('_', '.', $this->addon->uri->segment(4));
+			
+			else:
+			
+				$filename = $this->addon->uri->segment(4);
+			
+			endif;
+				
 			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
 
 			echo @file_get_contents( APPPATH . 'third_party/mb/javascript/'.$file);
@@ -708,7 +735,19 @@ class mb
 	 */
 	function _css()
 	{
-		$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
+		// GoDaddy mode check
+	
+		if( $this->addon->config->item('godaddy_mode') ):
+		
+			$filename = str_replace('_', '.', $this->addon->uri->segment(4));
+		
+		else:
+		
+			$filename = $this->addon->uri->segment(4);
+		
+		endif;
+
+		$file = $this->addon->security->sanitize_filename( $filename );
 		
 		header("Content-Type: text/css");
 	
@@ -725,6 +764,18 @@ class mb
 	 */
 	function _images()
 	{
+		// GoDaddy mode check
+	
+		if( $this->addon->config->item('godaddy_mode') ):
+		
+			$filename = str_replace('_', '.', $this->addon->uri->segment(4));
+		
+		else:
+		
+			$filename = $this->addon->uri->segment(4);
+		
+		endif;
+		
 		$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
 		
 		$this->addon->load->helper('file');
