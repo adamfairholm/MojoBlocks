@@ -33,7 +33,7 @@ class mb
 	{
 		$this->addon =& get_instance();
 		
-		$this->addon->load->config('Mojoblocks');
+		$this->addon->load->config('mojoblocks');
 			
 		// -------------------------------------
 		// Get the MM version
