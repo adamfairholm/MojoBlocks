@@ -32,14 +32,36 @@ class mb
 	function __construct()
 	{
 		$this->addon =& get_instance();
-
+		
 		$this->addon->load->config('Mojoblocks');
+			
+		// -------------------------------------
+		// Get the MM version
+		// -------------------------------------
+		
+		$this->addon->load->Database();
+		
+		$this->addon->load->model('site_model');
+		
+		$this->mm_version = $this->addon->site_model->get_setting('mojo_version');
+		
+		if( $this->mm_version >= 1.1 ):
+		
+			$this->method_segment 	= 4;
+			$this->file_segment		= 5;
+		
+		else:
+		
+			$this->method_segment 	= 3;
+			$this->file_segment		= 4;
+		
+		endif;
 		
 		// -------------------------------------
 		// Dip out for CSS/JS
 		// -------------------------------------
 
-		$method = $this->addon->uri->segment( 3 ); 
+		$method = $this->addon->uri->segment( $this->method_segment ); 
 
 		if( $method == 'css' || $method == 'js' || $method == 'images' ):
 			
@@ -66,7 +88,6 @@ class mb
 		$this->addon->lang->load('mb', '', FALSE, TRUE, APPPATH.'third_party/mb/');
 		
 		$this->addon->load->model('blocks_mdl');
-		
 		
 		// -------------------------------------
 		// Load JS and CSS assets
@@ -684,19 +705,21 @@ class mb
 	{
 		header("Content-Type: text/javascript");
 		
-		if( $this->addon->uri->segment(4) == 'block' ):
+		echo "var backwards_compat_path='".site_url('addons')."';\n\n";
 		
-			$block = $this->addon->uri->segment(5);
+		if( $this->addon->uri->segment($this->file_segment) == 'block' ):
+		
+			$block = $this->addon->uri->segment($this->file_segment+1);
 			
 			// GoDaddy mode check
 			
 			if( $this->addon->config->item('godaddy_mode') ):
 			
-				$filename = str_replace('_', '.', $this->addon->uri->segment(6));
+				$filename = str_replace('_', '.', $this->addon->uri->segment($this->file_segment+2));
 			
 			else:
 			
-				$filename = $this->addon->uri->segment(6);
+				$filename = $this->addon->uri->segment($this->file_segment+2);
 			
 			endif;
 
@@ -710,15 +733,15 @@ class mb
 
 			if( $this->addon->config->item('godaddy_mode') ):
 			
-				$filename = str_replace('_', '.', $this->addon->uri->segment(4));
+				$filename = str_replace('_', '.', $this->addon->uri->segment($this->file_segment));
 			
 			else:
 			
-				$filename = $this->addon->uri->segment(4);
+				$filename = $this->addon->uri->segment($this->file_segment);
 			
 			endif;
 				
-			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
+			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment($this->file_segment));
 
 			echo @file_get_contents( APPPATH . 'third_party/mb/javascript/'.$file);
 		
@@ -739,11 +762,11 @@ class mb
 	
 		if( $this->addon->config->item('godaddy_mode') ):
 		
-			$filename = str_replace('_', '.', $this->addon->uri->segment(4));
+			$filename = str_replace('_', '.', $this->addon->uri->segment($this->file_segment));
 		
 		else:
 		
-			$filename = $this->addon->uri->segment(4);
+			$filename = $this->addon->uri->segment($this->file_segment);
 		
 		endif;
 
@@ -768,15 +791,15 @@ class mb
 	
 		if( $this->addon->config->item('godaddy_mode') ):
 		
-			$filename = str_replace('_', '.', $this->addon->uri->segment(4));
+			$filename = str_replace('_', '.', $this->addon->uri->segment($this->file_segment));
 		
 		else:
 		
-			$filename = $this->addon->uri->segment(4);
+			$filename = $this->addon->uri->segment($this->file_segment);
 		
 		endif;
 		
-		$file = $this->addon->security->sanitize_filename($this->addon->uri->segment(4));
+		$file = $this->addon->security->sanitize_filename($this->addon->uri->segment($this->file_segment));
 		
 		$this->addon->load->helper('file');
 

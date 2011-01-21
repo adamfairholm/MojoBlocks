@@ -151,7 +151,7 @@ mojoBlocks.init_editor = function (region) {
 		dataType: "text",
 		type: "POST",
 		data: Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&layout_id='+layout_id+'&region_id='+region_id+'&page_url_title='+Mojo.Vars.page_url_title+'&block_type='+block_type+'&region_class='+region_class,
-		url:  Mojo.URL.site_path+"/addons/mb/editor",
+		url: backwards_compat_path+"/mb/editor",
 		success: function(data){ $('#'+region_id).html(data); }
 	});
 
@@ -211,7 +211,7 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 		dataType: "text",
 		type: "POST",
 		data: data_string,
-		url:  Mojo.URL.site_path+"/addons/mb/editor",
+		url:  backwards_compat_path+"/mb/editor",
 		success: function(return_data){ 
 
 			// Grab the new content
@@ -232,7 +232,7 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 					dataType: "text",
 					type: "POST",
 					data: ajax_block_data,
-					url:  Mojo.URL.site_path+"/addons/mb/ajax_block",
+					url:  backwards_compat_path+"/mb/ajax_block",
 					
 						success: function(new_data){ 
 						
