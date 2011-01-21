@@ -40,9 +40,9 @@ class Blocks_mdl extends CI_Model {
 
    // --------------------------------------------------------------------------
 
-    function Blocks_mdl()
+    function __construct()
     {
-        parent::CI_Model();
+       	parent::__construct();
 
 		$this->load->database();
     }
