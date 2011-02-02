@@ -4,7 +4,7 @@
 	
 		{icon} <p class="block_title">{block_name} Block</p>
 	
-	</div><!--block_header-->
+	</div>
 
 	<form class="mojoblocks_form" method="post" id="mb_editor" onsubmit="return false;">
 
@@ -34,7 +34,7 @@
 	
 	</div>
 	
-	<p class="actions">
+	<p class="mojoblocks_actions">
 		
 		<a id="submit_block_form" class="{region_id}"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/submit_button.gif" alt="Submit" /></a>
 		<a id="cancel_block_editor" class="{region_id}"><img src="<?php echo base_url().SYSDIR;?>/mojomotor/third_party/mb/views/themes/images/cancel_button.gif" alt="Cancel" /></a>

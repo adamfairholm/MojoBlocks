@@ -12,8 +12,8 @@ form.mojoblocks_form h2 img {margin-bottom: -6px; margin-right: 4px;}
 form.mojoblocks_form select {width: 140px;}
 form.mojoblocks_form textarea {width: 100%;}
 
-p.actions {float: left;}
-p.actions a {cursor: pointer;}
+p.mojoblocks_actions {float: left;}
+p.mojoblocks_actions a {cursor: pointer;}
 
 table.mojoblocks_table {float: left;}
 table.mojoblocks_table td {padding: 4px;}
