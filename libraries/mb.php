@@ -705,8 +705,6 @@ class mb
 	{
 		header("Content-Type: text/javascript");
 		
-		echo "var backwards_compat_path='".site_url('addons')."';\n\n";
-		
 		if( $this->addon->uri->segment($this->file_segment) == 'block' ):
 		
 			$block = $this->addon->uri->segment($this->file_segment+1);
@@ -741,7 +739,13 @@ class mb
 			
 			endif;
 				
-			$file = $this->addon->security->sanitize_filename($this->addon->uri->segment($this->file_segment));
+			$file = $this->addon->security->sanitize_filename( $filename );
+
+			if( $file == 'blocks.functions.min.js' ):
+			
+				echo "var backwards_compat_path='".site_url('addons')."';\n\n";
+			
+			endif;
 
 			echo @file_get_contents( APPPATH . 'third_party/mb/javascript/'.$file);
 		
