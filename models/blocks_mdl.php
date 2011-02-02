@@ -286,8 +286,6 @@ class Blocks_mdl extends CI_Model {
 		
 		$block = $obj->row_array();
 		
-		//echo $this->db->last_query();
-		
 		$block['block_content'] 	= unserialize($block['block_content']);
 		$block['tag_settings'] 		= unserialize($block['tag_settings']);
 		
