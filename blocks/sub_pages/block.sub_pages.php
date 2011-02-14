@@ -81,7 +81,15 @@ class block_sub_pages
 		
 		// Get the current URL
 		
-		$this->current_segment = $this->block->uri->segment(2);
+		if( MM_VERSION >= 1.1 ):
+		
+			$this->current_segment = $this->block->uri->segment(1);
+		
+		else:
+		
+			$this->current_segment = $this->block->uri->segment(2);
+		
+		endif;
 	}
 
 	// --------------------------------------------------------------------	
@@ -150,15 +158,28 @@ class block_sub_pages
 		
 		endif;
 		
-		foreach( $site_structure as $key => $value ):
+		if( $site_structure && is_array($site_structure) ):
 		
-			$out .= $this->create_ul_element( $key, $value );
+			foreach( $site_structure as $key => $value ):
+			
+				$out .= $this->create_ul_element( $key, $value );
+			
+			endforeach;
 		
-		endforeach;
+		endif;
 		
 		return $out;
 	}
 
+	// --------------------------------------------------------------------	
+
+	/**
+	 * Recursive function to create UL element
+	 *
+	 * @param	string
+	 * @param	mixed
+	 * @return	string
+	 */
 	function create_ul_element( $key, $var )
 	{
 		$out = '';
@@ -166,9 +187,7 @@ class block_sub_pages
 		if( $this->count <= $this->depth ):
 		
 		// Increment before things get crazy
-		
-		$this->count++;
-	
+			
 		if( !is_array($var) || (isset($var[0]) && $var[0] == '') ):
 		
 			if( (isset($var[0]) && $var[0] == '') ):
@@ -197,8 +216,15 @@ class block_sub_pages
 		
 			// -------------------------------------
 			
+			if( MM_VERSION >= 1.1 ):
 		
-			$out .= '<li><a href="'.site_url('page/'.$this->page_list[$node]['url_title']).'"'.$class.'>'.$this->page_list[$node]['page_title'].'</a></li>' . "\n";
+				$out .= '<li><a href="'.site_url($this->page_list[$node]['url_title']).'"'.$class.'>'.$this->page_list[$node]['page_title'].'</a></li>' . "\n";
+			
+			else:
+
+				$out .= '<li><a href="'.site_url('page/'.$this->page_list[$node]['url_title']).'"'.$class.'>'.$this->page_list[$node]['page_title'].'</a></li>' . "\n";
+			
+			endif;
 		
 		else:
 		
@@ -230,7 +256,11 @@ class block_sub_pages
 		
 			foreach( $var as $key => $var ):
 			
+				$this->count++;
+			
 				$out .= $this->create_ul_element( $key, $var );
+				
+				$this->count--;
 			
 			endforeach;
 			
@@ -245,5 +275,5 @@ class block_sub_pages
 
 }
 
-/* End of file block.html.php */
-/* Location: system/mojomotor/third_party/mb/blocks/html/block.html.php */
+/* End of file block.sub_pages.php */
+/* Location: system/mojomotor/third_party/mb/blocks/sub_pages/block.sub_pages.php */

@@ -57,6 +57,8 @@ class mb
 		
 		endif;
 		
+		define('MM_VERSION', $this->mm_version);
+		
 		// -------------------------------------
 		// Dip out for CSS/JS
 		// -------------------------------------

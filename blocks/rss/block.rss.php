@@ -172,7 +172,7 @@ class block_rss
 			$count++;
 					
 		endforeach;
-
+		
 		return parse_block_template( $this->block_slug, $feed_data, $block_data['layout'] );					
 	}
 
