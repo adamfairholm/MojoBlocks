@@ -1,7 +1,7 @@
-MojoBlocks v1.2.1
+MojoBlocks v1.2.2
 =====================
-by Green Egg Media
-www.greeneggmedia.com
+by Addict Add-ons
+www.addictaddons.com
 =====================
 
 Welcome to MojoBlocks! This is your README.txt file. Looks like you are good at following instructions.
@@ -16,16 +16,20 @@ Documentation
 
 You can find all the documentation you could want here:
 
-http://www.greeneggmedia.com/mojoblocks/documentation
+http://addictaddons.com/mojoblocks/docs
 
 Support
 =======
 
-Something go wrong? We are here for you. Check out http://www.greeneggmedia.com/mojoblocks/support for support options. If our site is down for some reason, just email us at mojoblocks@greeneggmedia.com or get us on Twitter at @greeneggmedia. Twitter is never down!
+Something go wrong? We are here for you. Our primary place of support is our support forums which you can find here:
+
+http://addictaddons.com/forums
+
+We monitor those forums are respond as quickly as possible. You can also search for other problems similar to yours on the forums or talk about anything else related to MojoBlocks or our other add-ons.
 
 License
 =======
 
 A copy of the MojoBlocks license was included with your download. You can always get a copy of it here if you really like it or something.
 
-http://www.greeneggmedia.com/MojoBlocks_License.txt
+http://www.addictaddons.com/licenses/mojoblocks_license.txt

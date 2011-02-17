@@ -5,8 +5,10 @@
  *
  * @package		MojoBlocks
  * @subpackage	Addons
- * @author		Green Egg Media
- * @link		http://www.greeneggmedia.com
+ * @copyright	Copyright (c) 2011, Addict Add-ons
+ * @author		Addict Add-ons
+ * @license		http://www.addictaddons.com/licenses/mojoblocks_license.txt
+ * @link		http://www.addictaddons.com/mojoblocks
  */
 
 $lang['mb_error']								= "Error";

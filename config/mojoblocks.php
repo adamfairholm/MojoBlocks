@@ -5,10 +5,10 @@
  *
  * @package		MojoBlocks
  * @subpackage	Config
- * @copyright	Copyright (c) 2011, Green Egg Media
- * @author		Addict Addons
- * @license		http://www.greeneggmedia.com/MojoBlocks_License.txt
- * @link		http://www.greeneggmedia.com/mojoblocks
+ * @copyright	Copyright (c) 2011, Addict Add-ons
+ * @author		Addict Add-ons
+ * @license		http://www.addictaddons.com/licenses/mojoblocks_license.txt
+ * @link		http://www.addictaddons.com/mojoblocks
  */
  
  /**
@@ -16,5 +16,5 @@
   */
 $config['godaddy_mode']			= FALSE;
 
-/* End of file block_helper.php */
+/* End of file mojoblocks.php */
 /* Location: ./third_party/mb/config/mojoblocks.php */
