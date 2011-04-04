@@ -32,7 +32,7 @@ mojoBlocks.setup_blocks = function()
 	}
 
 	// View mode toggle
-	$('#mojo_bar_view_mode, #collapse_tab').live('click', function() {
+	jQuery('#mojo_bar_view_mode, #collapse_tab').live('click', function() {
 
 		if (mojoEditor.is_open)
 		{
@@ -51,14 +51,14 @@ mojoBlocks.setup_blocks = function()
 
 
 	// Submit button for editor
-	$('#submit_block_form').live('click', function() {
+	jQuery('#submit_block_form').live('click', function() {
 	
 		mojoBlocks.submit_blocks_form( jQuery(this).attr('class') );
 	
 	});
 	
 	// Cancel button for editor
-	$('#cancel_block_editor').live('click', function() {
+	jQuery('#cancel_block_editor').live('click', function() {
 	
 		mojoBlocks.cancel_editor( jQuery(this).attr('class') );
 	
@@ -76,7 +76,7 @@ mojoBlocks.enable_block_regions = function ()
 
 		// Add in the editable stuff
 		block_editable = jQuery("<div class='mojoblock_editable_layer local_mb'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('slow');
-		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Local: "+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
+		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Local: "+jQuery(this).attr('name')+" Block</p></div>")).prepend(block_editable);
 
 	});
 
@@ -84,7 +84,7 @@ mojoBlocks.enable_block_regions = function ()
 
 		// Add in the editable stuff
 		block_editable = jQuery("<div class='mojoblock_editable_layer global_mb'></div>").css({opacity: '0.4', width: jQuery(this).width(), height: jQuery(this).outerHeight()}).fadeIn('slow');
-		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Global: "+$(this).attr('name')+" Block</p></div>")).prepend(block_editable);
+		jQuery(this).prepend(jQuery("<div class='mojo_editable_layer_header'><p>Global: "+jQuery(this).attr('name')+" Block</p></div>")).prepend(block_editable);
 
 	});
 
@@ -144,7 +144,7 @@ mojoBlocks.init_editor = function (region) {
 	layout_id = Mojo.Vars.layout_id;
 	
 	//Get rid of the stuff we just put in there when we activated the mojoblock regions
-	$('#'+region_id).empty();
+	jQuery('#'+region_id).empty();
 	
 	// Replace MB Region with editor
 	jQuery.ajax({
@@ -152,7 +152,7 @@ mojoBlocks.init_editor = function (region) {
 		type: "POST",
 		data: Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&layout_id='+layout_id+'&region_id='+region_id+'&page_url_title='+Mojo.Vars.page_url_title+'&block_type='+block_type+'&region_class='+region_class,
 		url: backwards_compat_path+"/mb/editor",
-		success: function(data){ $('#'+region_id).html(data); }
+		success: function(data){ jQuery('#'+region_id).html(data); }
 	});
 
 	mojoBlocks.allow_editor_init = false;
@@ -164,8 +164,8 @@ mojoBlocks.init_editor = function (region) {
 
 mojoBlocks.disable_block_regions = function ()
 {	
-	$('.mojoblock_editable_layer').fadeOut(300, function() { $(this).remove(); });
-	$('.mojo_editable_layer_header').fadeOut(300, function() { $(this).remove(); });
+	jQuery('.mojoblock_editable_layer').fadeOut(300, function() { jQuery(this).remove(); });
+	jQuery('.mojo_editable_layer_header').fadeOut(300, function() { jQuery(this).remove(); });
 };
 
 // -------------------------------------
@@ -175,7 +175,7 @@ mojoBlocks.disable_block_regions = function ()
 mojoBlocks.cancel_editor = function (region_id) {
 
 	// Clear the region
-	$('#'+region_id).empty();
+	jQuery('#'+region_id).empty();
 
 	// Add the fallback content
 	jQuery('#'+region_id).html(mojoBlocks.fallback_contents[region_id]);
@@ -195,12 +195,12 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 
 	// Let's go through all the inputs.
 
-	var $inputs = $('form#mb_editor :input');
+	var $inputs = jQuery('form#mb_editor :input');
     
     var data_string = '';
     
     $inputs.each(function() {
-        data_string += this.name+'='+escape($(this).val())+'&';
+        data_string += this.name+'='+escape(jQuery(this).val())+'&';
     });
     
     data_string += Mojo.Vars.csrf_token+'='+Mojo.Vars.csrf+'&form_submit=true';
@@ -222,7 +222,7 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 			}
 			else if( is_numeric(return_data) == false )
 			{
-				$('#'+region_id).html(return_data);
+				jQuery('#'+region_id).html(return_data);
 			}
 			else
 			{			
@@ -239,7 +239,7 @@ mojoBlocks.submit_blocks_form = function (region_id) {
 							// This is our new fallback content
 							mojoBlocks.fallback_contents[region_id] = new_data;
 						
-							$('#'+region_id).html(new_data); 
+							jQuery('#'+region_id).html(new_data); 
 							
 							mojoBlocks.enable_block_regions(); 
 						
