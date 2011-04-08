@@ -1,4 +1,4 @@
-MojoBlocks v1.2.2
+MojoBlocks v1.2.3
 =====================
 by Addict Add-ons
 www.addictaddons.com
