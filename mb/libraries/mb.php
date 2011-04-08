@@ -80,9 +80,7 @@ class mb
 		// -------------------------------------
 		
 		$this->addon->load->library('Blocks');
-
-		$this->addon->load->library('Security');
-		
+				
 		$this->addon->load->helper('block');
 
 		$this->addon->load->helper('cache');
