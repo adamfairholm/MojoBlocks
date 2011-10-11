@@ -63,12 +63,11 @@ class block_sub_pages
 
 		$this->block->load->model('page_model');
 		
-		$this->page_list = $this->block->page_model->get_all_pages_info( TRUE );
+		$this->page_list = $this->block->page_model->get_all_pages_info();
 		
 		$this->site_structure = $this->block->site_model->get_setting('site_structure');
 		
 		// Populate "Start From"
-		
 		$pages_list = array();
 		
 		foreach( $this->page_list as $key => $value ):
@@ -79,8 +78,7 @@ class block_sub_pages
 		
 		$this->block_fields['start_from']['values'] = $pages_list;
 		
-		// Get the current URL
-		
+		// Get the current URL		
 		if( MM_VERSION >= 1.1 ):
 		
 			$this->current_segment = $this->block->uri->segment(1);
@@ -104,14 +102,12 @@ class block_sub_pages
 	function render( $block_data )
 	{
 		// Get the page ID
-		
 		$page_id = $block_data['start_from'];
 		
 		if( !is_numeric($page_id) ):
 		
 			// If the page ID is not numeric, a url_title must've been passed.
 			// We need to get the ID from that.
-			
 			$page_data = $this->block->page_model->get_page_by_url_title( strtolower($page_id) );
 			
 			if( isset( $page_data->id ) ):
@@ -125,9 +121,8 @@ class block_sub_pages
 			endif;
 		
 		endif;
-		
+
 		// Find & set the depth
-		
 		if( !isset($block_data['depth']) || !is_numeric($block_data['depth']) ):
 		
 			$this->depth = 1;
@@ -146,8 +141,8 @@ class block_sub_pages
 		
 		endif;
 		
-		// Build UL
 		
+		// Build UL
 		if( $block_data['id'] ):
 		
 			$out = "\n" . '<ul id="' . $block_data['id'] . '">' . "\n";
@@ -182,8 +177,12 @@ class block_sub_pages
 	 */
 	function create_ul_element( $key, $var )
 	{
+		// Check to see if we should even be messing with this.
+		// If the page tree did not return it, then we shouldn't either.
+		if(!isset($this->page_list[$key])) return null;
+	
 		$out = '';
-
+		
 		if( $this->count <= $this->depth ):
 		
 		// Increment before things get crazy
@@ -228,9 +227,7 @@ class block_sub_pages
 		
 		else:
 		
-		// It is an array
-			
-			// Make a new UL
+		// It is an array, so make a new UL
 
 			// -------------------------------------			
 			// Should this be a current?
