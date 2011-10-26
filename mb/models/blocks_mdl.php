@@ -5,10 +5,10 @@
  *
  * @package		MojoBlocks
  * @subpackage	Models
- * @copyright	Copyright (c) 2011, Addict Add-ons
- * @author		Addict Add-ons
- * @license		http://www.addictaddons.com/licenses/mojoblocks_license.txt
- * @link		http://www.addictaddons.com/mojoblocks
+ * @copyright	Copyright (c) 2011, Parse19
+ * @author		Parse19
+ * @license		http://parse19.com/mojoblocks/docs/license
+ * @link		http://parse19.com/mojoblocks
  */ 
 
 class Blocks_mdl extends CI_Model {
