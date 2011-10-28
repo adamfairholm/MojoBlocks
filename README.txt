@@ -1,4 +1,4 @@
-MojoBlocks v1.2.3
+MojoBlocks v1.2.4
 =====================
 by Parse19
 parse19.com

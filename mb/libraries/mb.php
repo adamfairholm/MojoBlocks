@@ -15,7 +15,7 @@ class mb
 {
 	var $addon;
 	
-	var $addon_version 						= '1.2.3';
+	var $addon_version 						= '1.2.4';
 	
 	var $dependencies_loaded 				= FALSE;
 	
