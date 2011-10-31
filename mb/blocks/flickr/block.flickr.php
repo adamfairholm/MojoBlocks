@@ -256,7 +256,7 @@ class block_flickr
 		$image['square_image']			= $img_url.'_s.jpg';
 		$image['thumbnail_image']		= $img_url.'_t.jpg';
 		$image['small_image']			= $img_url.'_m.jpg';
-		$image['medium_image']			= $img_url.'jpg';
+		$image['medium_image']			= $img_url.'.jpg';
 		$image['large_image']			= $img_url.'_b.jpg';
 		$image['original_image']		= $img_url.'_o.jpg';
 		$image['image_url']				= 'http://www.flickr.com/photos/'.$owner.'/'.$photo->id;
