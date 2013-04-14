@@ -5,10 +5,10 @@
  *
  * @package		MojoBlocks
  * @subpackage	Addons
- * @copyright	Copyright (c) 2011, Parse19
- * @author		Parse19
- * @license		http://parse19.com/mojoblocks/docs/license
- * @link		http://parse19.com/mojoblocks
+ * @copyright	Copyright (c) 2013 Adam Fairholm
+ * @author		Adam Fairholm
+ * @license		MIT
+ * @link		http://adamfairholm.com/code/mojoblocks
  */
 
 $lang['mb_error']								= "Error";
