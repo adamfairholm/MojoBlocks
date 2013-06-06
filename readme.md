@@ -500,7 +500,7 @@ You must provide the following class variables for the block class:
 
 #### Using CodeIgniter
 
-MojoMotor is build on [CodeIgniter](), which means you can use all the CodeIgniter libraries and goodies that it offers. For full documentation on CodeIgniter, see the [CI User Docs](). To get a copy of the CI super object, use the following code in your constructor and reference objects as <var>$this->block</var>:
+MojoMotor is build on [CodeIgniter](http://ellislab.com/codeigniter), which means you can use all the CodeIgniter libraries and goodies that it offers. For full documentation on CodeIgniter, see the [CI User Docs](http://ellislab.com/codeigniter/user-guide/). To get a copy of the CI super object, use the following code in your constructor and reference objects as <var>$this->block</var>:
 
 	$this->block =& get_instance();
 
