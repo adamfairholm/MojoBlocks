@@ -490,7 +490,7 @@ You must provide the following class variables for the block class:
 </tr> 
 <tr> 
 	<td>block_fields</td> 
-	<td>The information your block needs. For more information, see <a href="mojoblocks/documentation/block-data-types">Block Data Types</a></td> 
+	<td>The information your block needs. For more information, see <a href="#block-data-types">Block Data Types</a></td> 
 </tr> 
 </table>
 
