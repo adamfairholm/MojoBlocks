@@ -133,7 +133,7 @@ MojoMotor comes with the following block:
 	<td>Display sub pages from a given page.</td> 
 </tr>
 <tr> 
-	<td>Sub Page</td> 
+	<td>Text</td> 
 	<td>Display text.</td> 
 </tr>
 <tr> 
