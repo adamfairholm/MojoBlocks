@@ -1,6 +1,6 @@
 # MojoBlocks v1.2.4
 
-MojoBlocks is an add-on for  allows you to create editable "blocks" for special content. 
+MojoBlocks is an add-on that allows you to create editable "blocks" for special content. 
 
 ## Installation
 
