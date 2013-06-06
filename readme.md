@@ -375,9 +375,9 @@ Below are a table of single variables available to the template.
 
 Contains data for the tweets retrieved by the block, including some basic information about the tweeter for use if necessary.
 
-	&#123;tweets&#125;
-		&#123;example_variable&#125;
-	&#123;/tweets&#125;
+	{tweets}
+		{example_variable}
+	{/tweets}
 
 <table cellpadding="0" cellspacing="0"> 
 <tr> 
